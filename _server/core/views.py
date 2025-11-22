@@ -3,6 +3,8 @@ from django.conf  import settings
 import json
 import os
 from django.contrib.auth.decorators import login_required
+from django.forms.models import model_to_dict
+from django.http import JsonResponse
 
 # Load manifest when server launches
 MANIFEST = {}
@@ -21,3 +23,8 @@ def index(req):
         "css_file": "" if settings.DEBUG else MANIFEST["src/main.ts"]["css"][0]
     }
     return render(req, "core/index.html", context)
+
+@login_required
+def get_me(req):
+    user = req.user
+    return JsonResponse({"user": model_to_dict(user)})

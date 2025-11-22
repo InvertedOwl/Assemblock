@@ -1,0 +1,58 @@
+.node {
+    height: 50px;
+    width: fit-content;
+    background-color: #f0f0f0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    color: black;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: grab;
+    user-select: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.35);
+    padding-left: 20px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    transition: outline 0.2s ease, box-shadow 0.2s ease;
+    min-width: 65px;
+}
+
+.spacer {
+    color: white;
+}
+
+.connectedleft {
+    border-radius: 0px 15px 15px 0px;
+}
+
+.connectedright {
+    border-radius: 15px 0px 0px 15px;
+}
+
+.connectedboth {
+    border-radius: 0px;
+}
+
+.active {
+    box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7);
+    outline: 2px solid #ffffff;
+}
+
+.title-part-with-param {
+    display: flex;
+    flex-direction: row;
+    margin-right: 5px;
+    align-items: center;    
+}
+.param {
+    width: 60px;
+    margin-left: 5px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 18px;
+    height: fit-content;
+    padding: 5px;
+    border: none;
+    border-radius: 10px;
+}
