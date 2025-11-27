@@ -95,7 +95,7 @@ export default function Node(props) {
                             {hasParamHere && params[paramIndex] && (
                                 <input
                                     className={"param nodrag"}
-                                        style={{width: (params[paramIndex].type == "number") ? Math.log10(params[paramIndex].max || 9) * 9 : undefined}}
+                                        style={{width: (params[paramIndex].type == "number") ? Math.log10(params[paramIndex].max || 7) * 7 : undefined}}
                                     type={params[paramIndex].type === "number" ? "number" : "text"}
                                     value={
                                         params[paramIndex].type === "number"

@@ -65,6 +65,7 @@ function App() {
     setBlocks((prev) => {
       const newBlocks = [...prev];
       const nodeCopy = JSON.parse(JSON.stringify(node));
+      nodeCopy.callback = node.callback
       const canvasEl = document.querySelector('.canvas');
       const canvasRect = canvasEl ? canvasEl.getBoundingClientRect() : null;
       const clientX = e.clientX;

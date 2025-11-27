@@ -5,25 +5,22 @@
     display: flex;
     justify-content: center;
     color: black;
-    border-radius: 15px;
     font-weight: bold;
     font-size: 18px;
     cursor: grab;
     user-select: none;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5);
-    padding: 5px 10px;
+    padding: 0px 2px;
     transition: outline 0.2s ease, box-shadow 0.2s ease;
     min-width: 65px;
-    /* max-width: 150px; */
     width: fit-content;
     white-space: normal;
-    /* flex-wrap: wrap; */
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-family: monospace;
     margin-top: 10px;
-    
+    border-radius: 12px;
 }
 
 .spacer {
@@ -31,15 +28,16 @@
     padding: 0px;
     margin: 0px;
     letter-spacing: -2px;
-    font-size: 13px;
+    font-size: 10px;
+    white-space:nowrap;
 }
 
 .connectedleft {
-    border-radius: 0px 15px 15px 0px;
+    border-radius: 0px 12px 12px 0px;
 }
 
 .connectedright {
-    border-radius: 15px 0px 0px 15px;
+    border-radius: 12px 0px 0px 12px;
 }
 
 .connectedboth {
@@ -54,7 +52,7 @@
 .title-part-with-param {
     display: flex;
     flex-direction: row;
-    margin-right: 5px;
+    margin: 2px;
     align-items: center;    
 }
 .param {
@@ -65,8 +63,8 @@
     height: fit-content;
     padding: 3px;
     border: none;
-    border-radius: 10px;
-    font-size: 13px;
+    border-radius: 5px;
+    font-size: 10px;
 }
 
 .param-number {
@@ -93,6 +91,7 @@ input.param[type="number"] {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    min-height: 23px;
 }
 
 .param-title {
@@ -100,7 +99,7 @@ input.param[type="number"] {
     margin-bottom: 3px;
     margin-top: 3px;
     padding: 0;
-    font-size: 17px;
+    font-size: 14px;
 
     /*
     Source - https://stackoverflow.com/a
