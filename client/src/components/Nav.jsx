@@ -52,14 +52,20 @@ export const Nav = (props) => {
             </div>
 
             <div className="nav-right">
+                {/* Material symbol icon; the text content (icon name) is required. */}
+                <span class="material-symbols-outlined settings">
+                discover_tune
+                </span>
                 <span className="share">Share</span>
 
                 {user ? (
-                    <span>Welcome, <a href="">{user.first_name}</a></span>
+                    <span><a href="">{user.first_name}</a></span>
                 ) : (
                     <a href="/login/">Login</a>
                 )}
             </div>
+
+
         </div>
     );
 };
