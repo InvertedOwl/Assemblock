@@ -40,6 +40,9 @@ def script(req):
         script_json = data.get("script_json")
         title = data.get("title", "Untitled Script")
 
+        print(f"Saving script: {title}")
+        print(f"Script JSON: {script_json}")
+
         from .models import Script
 
         if script_id:
@@ -49,13 +52,12 @@ def script(req):
                 script.title = title
                 script.save()
             except Script.DoesNotExist:
-                return JsonResponse({"error": "Script not found."}, status=404)
-        else:
-            script = Script.objects.create(
-                owner=req.user,
-                title=title,
-                script_json=script_json
-            )
+                script = Script.objects.create(
+                    owner=req.user,
+                    title=title,
+                    script_json=script_json
+                )
+
 
         return JsonResponse({"success": True, "script_id": script.id})
     elif req.method == "GET":

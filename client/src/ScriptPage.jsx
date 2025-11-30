@@ -149,7 +149,7 @@ export function ScriptPage() {
       >
         discover_tune
       </span>
-      {showSettings && <SettingsPopup/>}
+      {showSettings && <SettingsPopup blocks={blocks} />}
 
       <button
         className={"control-button " + (playing ? "stop-button" : "play-button")}

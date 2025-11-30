@@ -1,7 +1,25 @@
 import React, { useEffect, useRef } from 'react';
 import './SettingsPopup.css';
+import { parseCookie } from 'cookie';
 
-export const SettingsPopup = () => {
+export const SettingsPopup = (props) => {
+  const blocks = props.blocks;
+
+  const saveScript = () => {
+    const scriptData = { "script_json": blocks, "title": "My Script", "id": 1 };
+    const scriptJSON = JSON.stringify(scriptData, null, 2);
+
+    fetch("/script/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": parseCookie(document.cookie).csrftoken
+      },
+      credentials: 'same-origin',
+      body: scriptJSON,
+    })
+    console.log(scriptJSON);
+  }
 
   return (
     <div className="settings-popup" role="dialog" aria-label="Settings">
@@ -16,7 +34,7 @@ export const SettingsPopup = () => {
           <input type="checkbox" /> Enable feature B
         </label>
 
-        <button>Save Script</button>
+        <button onClick={saveScript}>Save Script</button>
       </div>
     </div>
   );
