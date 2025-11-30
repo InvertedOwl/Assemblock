@@ -71,7 +71,6 @@ export function ScriptPage() {
     setConsoleLines((prevLines) => [...prevLines, line]);
   }
 
-  // Clear the in-app console whenever playback starts
   useEffect(() => {
     if (playing) {
       setConsoleLines([]);
@@ -97,7 +96,6 @@ export function ScriptPage() {
 
       newBlocks.push({ children: [nodeCopy], position: { x, y } });
       const newIndex = newBlocks.length - 1;
-      // start tracking this palette-created block
       setPaletteDrag({ blockId: newIndex, startNodeOffsetX, startNodeOffsetY, lastX: clientX, lastY: clientY });
       return newBlocks;
     });
@@ -151,7 +149,7 @@ export function ScriptPage() {
       >
         discover_tune
       </span>
-      {showSettings && <SettingsPopup  />}
+      {showSettings && <SettingsPopup/>}
 
       <button
         className={"control-button " + (playing ? "stop-button" : "play-button")}

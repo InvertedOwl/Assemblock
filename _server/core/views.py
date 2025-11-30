@@ -31,3 +31,45 @@ def get_me(req):
     user_dict = model_to_dict(user)
     user_dict.pop("password", None)
     return JsonResponse({"user": user_dict})
+
+@login_required
+def script(req):
+    if req.method == "POST":
+        data = json.loads(req.body)
+        script_id = data.get("id")
+        script_json = data.get("script_json")
+        title = data.get("title", "Untitled Script")
+
+        from .models import Script
+
+        if script_id:
+            try:
+                script = Script.objects.get(id=script_id, owner=req.user)
+                script.script_json = script_json
+                script.title = title
+                script.save()
+            except Script.DoesNotExist:
+                return JsonResponse({"error": "Script not found."}, status=404)
+        else:
+            script = Script.objects.create(
+                owner=req.user,
+                title=title,
+                script_json=script_json
+            )
+
+        return JsonResponse({"success": True, "script_id": script.id})
+    elif req.method == "GET":
+        script_id = req.GET.get("id")
+        from .models import Script
+
+        try:
+            script = Script.objects.get(id=script_id, owner=req.user)
+            return JsonResponse({
+                "id": script.id,
+                "title": script.title,
+                "script_json": script.script_json,
+                "created_at": script.created_at,
+                "updated_at": script.updated_at
+            })
+        except Script.DoesNotExist:
+            return JsonResponse({"error": "Script not found."}, status=404)

@@ -41,7 +41,7 @@ export const Nav = (props) => {
                         isActive ? "navlink navlink-active" : "navlink"
                     }
                 >
-                    Shared Scripts
+                    Explore Scripts
                 </NavLink>
                 <NavLink
                     to="/favorites/"
@@ -49,7 +49,7 @@ export const Nav = (props) => {
                         isActive ? "navlink navlink-active" : "navlink"
                     }
                 >
-                    Favorites
+                    Collection
                 </NavLink>
             </div>
 
