@@ -15,6 +15,8 @@ export function ScriptPage() {
     const [blocks, setBlocks] = useState([
     ]);
 
+    const [title, setTitle] = useState("");
+
     const [registers, setRegisters] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
     const [consoleLines, setConsoleLines] = useState(["test1", "test2"]);
@@ -116,6 +118,8 @@ export function ScriptPage() {
               setBlocks(data.script_json);
             }
 
+            setTitle(data.title || "");
+
             // Go through and reattach callbacks
             setBlocks((prevBlocks) => {
               return prevBlocks.map((block) => {
@@ -139,7 +143,7 @@ return (
     <div className="app">
 
       <div className='title'>
-        <input type="text" placeholder='Title'/>
+        <input type="text" placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
       </div>
 
 
