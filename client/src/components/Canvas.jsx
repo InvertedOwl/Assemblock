@@ -8,6 +8,7 @@ export const Canvas = (props) => {
     // Callbacks for jumps should return a true or false for if it should jump
     const blocks = props.blocks;
     const setBlocks = props.setBlocks;
+    const speed = props.settings.executionSpeed;
 
     
     // Use ref to be able to stop async function
@@ -67,7 +68,7 @@ export const Canvas = (props) => {
             const node = block.children[item.nodeindex];
 
             setNodeActive(item.blockid, item.nodeindex, true);
-            await new Promise(r => setTimeout(r, 250));
+            await new Promise(r => setTimeout(r, 1/speed * 1000));
             const result = await node.callback(node.params.map(param => param.value), registersRef.current, props.setRegister, props.addConsoleLine);
             setNodeActive(item.blockid, item.nodeindex, false);
 

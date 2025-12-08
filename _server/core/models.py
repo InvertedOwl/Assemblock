@@ -9,6 +9,9 @@ class Script(models.Model):
     script_json = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    unlisted = models.BooleanField(default=False)
+    favorited_by = models.ManyToManyField('auth.User', related_name='favorite_scripts', blank=True)
+    settings_json = models.JSONField(default=dict)
 
     def __str__(self):
         return self.title

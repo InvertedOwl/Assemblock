@@ -1,5 +1,6 @@
 /* https://coolors.co/palette/ef476f-ffd166-06d6a0-118ab2-073b4c */
 const color = {
+    "comment": "#adb5bd",
     "start": "#06d6a0",
     "normal": "#f1c253ff",
     "label": "#ef476f",
@@ -8,6 +9,9 @@ const color = {
 };
 
 const nodes = [
+    // Comment
+    {"title": "Comment", "text": "<param>", "params": [{"type": "text", "value": "This is a comment", "name": "comment", "width": 100}], "callback": () => {}, "type": "comment", "color": color.comment, "active": false},
+
     // Triggers
     {"title": "Start", "params": [], "callback": () => {}, "type": "start", "color": color.start, "active": false},
 

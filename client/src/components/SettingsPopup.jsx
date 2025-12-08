@@ -1,32 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './SettingsPopup.css';
 import { parse as parseCookie } from 'cookie';
 
 export const SettingsPopup = (props) => {
   const blocks = props.blocks;
+  const title = props.title;
+  const [unlisted, setUnlisted] = useState(false);
+  const settings = props.settings;
+  const setSettings = props.setSettings;
+  const favorited = props.favorited;
 
-  const saveScript = async () => {
-    const scriptData = { "script_json": blocks, "title": "My Script", "id": parseCookie(document.cookie).script_id || null };
-    const scriptJSON = JSON.stringify(scriptData, null, 2);
+  const saveScript = props.saveScript;
 
-
-    const response = await fetch("/script/", {
-      method: "POST",
-        headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": parseCookie(document.cookie).csrftoken
-      },
-      credentials: 'same-origin',
-      body: scriptJSON,
-    })
-
-    const data = await response.json();
-    if (data.script_id) {
-      document.cookie = `script_id=${data.script_id}; path=/;`;
-    }
-
-    console.log(scriptJSON);
-  }
 
   return (
     <div className="settings-popup" role="dialog" aria-label="Settings">
@@ -35,10 +20,22 @@ export const SettingsPopup = (props) => {
       </div>
       <div className="settings-body">
         <label>
-            <input type="range" min="1" max="100" value="50" />
+            Run Speed:
+            <br />
+            <input 
+              type="range" 
+              min="1" 
+              max="25" 
+              value={settings.executionSpeed} 
+              onChange={(e) => setSettings({ ...settings, executionSpeed: e.target.value })} 
+            />
         </label>
         <label>
-          <input type="checkbox" /> Enable feature B
+          <input 
+            type="checkbox" 
+            checked={unlisted} 
+            onChange={(e) => setUnlisted(e.target.checked)} 
+          /> Unlisted
         </label>
 
         <button onClick={saveScript}>Save Script</button>

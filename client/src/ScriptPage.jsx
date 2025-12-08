@@ -16,16 +16,17 @@ export function ScriptPage() {
     ]);
 
     const [title, setTitle] = useState("");
-
-    const [registers, setRegisters] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-
+    const [favorited, setFavorited] = useState(false);
+    
     const [consoleLines, setConsoleLines] = useState(["test1", "test2"]);
-
+    
     const [settings, setSettings] = useState({
-        numRegisters: 10,
-        executionSpeed: 500,
-        hyperspeed: false,
+      numRegisters: 10,
+      executionSpeed: 500,
+      hyperspeed: false,
     });
+    
+    const [registers, setRegisters] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
     const setRegister = (index, value) => {
         setRegisters((prevRegisters) => {
@@ -119,6 +120,12 @@ export function ScriptPage() {
             }
 
             setTitle(data.title || "");
+            setFavorited(data.favorited || false);
+            setSettings(data.settings || {
+              numRegisters: 10,
+              executionSpeed: 500,
+              hyperspeed: false,
+            });
 
             // Go through and reattach callbacks
             setBlocks((prevBlocks) => {
@@ -137,13 +144,58 @@ export function ScriptPage() {
         
       getScript();
     }, []);
+  
+  const saveScript = async (updatedFields = {}) => {
+    const scriptData = {
+      "script_json": blocks,
+      "title": title,
+      "id": parseCookie(document.cookie).script_id || null,
+      "favorited": updatedFields.favorited !== undefined ? updatedFields.favorited : favorited,
+      "settings": settings,
+    };
+    const scriptJSON = JSON.stringify(scriptData, null, 2);
 
+
+    const response = await fetch("/script/", {
+      method: "POST",
+        headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": parseCookie(document.cookie).csrftoken
+      },
+      credentials: 'same-origin',
+      body: scriptJSON,
+    })
+
+    const data = await response.json();
+    if (data.script_id) {
+      document.cookie = `script_id=${data.script_id}; path=/;`;
+    }
+
+    console.log(scriptJSON);
+  }
+
+  
 
 return (
     <div className="app">
 
       <div className='title'>
+        
+        <button
+          className={"material-icons favorite" + (favorited ? " favorite-active" : "")}
+          aria-label="Favorite"
+          onClick={() => {
+            setFavorited((prev) => {
+              const newFavorited = !prev;
+              saveScript({ favorited: newFavorited });
+              return newFavorited;
+            });
+          }}
+        >
+          favorite
+        </button>        
         <input type="text" placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
+        <button>New Script</button>
       </div>
 
 
@@ -156,13 +208,14 @@ return (
       >
         discover_tune
       </span>
-      {showSettings && <SettingsPopup blocks={blocks} />}
+      {showSettings && <SettingsPopup saveScript={saveScript} favorited={favorited} blocks={blocks} title={title} settings={settings} setSettings={setSettings} />}
 
       <button
         className={"control-button " + (playing ? "stop-button" : "play-button")}
         onClick={() => {
             setPlaying((prev) => !prev)
             setRegisters(() => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            console.log("Clicked play/stop " + settings.executionSpeed)
           }}>{playing ? "Stop" : "Play"}</button>
 
 
@@ -184,7 +237,7 @@ return (
             }
           
         </div>
-        <Canvas className='canvas' playing={playing} setPlaying={setPlaying} blocks={blocks} setBlocks={setBlocks} registers={registers} setRegister={setRegister} addConsoleLine={addConsoleLine}></Canvas>
+        <Canvas settings={settings} className='canvas' playing={playing} setPlaying={setPlaying} blocks={blocks} setBlocks={setBlocks} registers={registers} setRegister={setRegister} addConsoleLine={addConsoleLine}></Canvas>
         <div className='right'>
           <Registers registers={registers}></Registers>
           <Console lines={consoleLines}></Console>
