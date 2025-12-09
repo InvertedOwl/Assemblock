@@ -1,28 +1,69 @@
-# 2610 Django + Vite Starting Point
-This project serves as a starting point you to use as a starting point for Django applications that use Vite as the asset server for development. You are welcome to us this project for all of your assignments beginning with Module 5.
+# Assemblock
+## Intro
+In high school, I created a visual based block programming language called "IdiotScript". This language was pretty bare bones, and often didn't work right, but it challenged me in all the right ways and made me learn so much about everything relating to web development. I tried (and failed) to do authentication among other hurdles. Now, with more concrete knowledge on all things authentication, react, and django, I intend to remake this visual programming language from the ground up in a much better way. I also intend to add features I always intended to add but never figured out how.
+## General Idea
+Assemblock will be a visual based block programming language similar to scratch. It will have functionality of a lot of basic programming languages (such as assembly). I tend to create the tool to be used for fun but also for learning! A lot of the base flow will carry heavily from assembly, such as jumps, stack, etc. The programmer will have to manage all these systems but in a nicer simpler environment like a block based language. 
 
-## Strategy
-This application is a hybrid MPA and SPA. It reuses all of the login stuff that we did at the end of module 3 - there is a separate page for signup/signin. Once a user is logged in they are redirected to the / view which then renders the SPA application created using React and Vite.
+## Feature list
+- Functioning block programming mechanics
+	- Moving blocks around
+	- Snapping blocks
+	- Managing block order
+	- Jumps
+	- (Maybe a middleware chain style chain system for the functionality?)
+	- 16 Registers
+- Running blocks
+- At least 20 blocks.
+- Simple UI, but effective UI
+- Authentication system
+	- Logging in
+	- Signing out
+- Sharing scripts
+	- Need to be signed in
+	- Can choose unlisted or public
+	- Sends and saved scripts to the server via authentication
+- Global script pages
+	- Browse other peoples scripts
+	- Like/Favorite scripts
+	- Preview of the script (Not sure how to o this)
+- Favorite script pages
+	- View all liked/Favorited scripts
+	- Be able to unfavorite
 
-## Creating a new application
-1. Clone the repo `git clone git@github.com:dittonjs/2610DjangoViteStarter.git <your-new-project-name>`. Replace `<your-new-project-name>` with the name you want give to your project.
-   - If you are using GitHub for version control, a better option would be to fork the repository instead of clone it.
-3. Open the pyproject.toml file and change the `name` property. You should use `-` to separate words in your name for this property.
-4. This project was set up using Python 3.11. You might have an older version installed. If you run into an error later that says that your activated Python version isn't compatible, the in the pyproject.toml file, just change the version there to match the version that you have installed. If you do this, you need to make sure that the lock file gets regenerated. You can do this by running `poetry lock --no-update` or by simply deleting the poetry.lock file (it will get regenerated when you run poetry install)/
+## Technical Challenges
+I will face many technical challenges while creating this app.
+Each item with a star is an item I need to look into further to be able to complete it.
+- * Moving blocks around
+- * Storing a chain of events stored in blocks.
+- Authentication
+- * Storing arbitrary data (the scripts) safely
+- * Simple but effective UI
+- Multiple pages
+- Sharing scripts
 
-## Initial Setup
-1. Change the name property in the `pyproject.toml` file to be something unique to your project.
-1. In the root directory, install the python dependencies `poetry install --no-root`
-2. In the `client` directory, install the javascript dependencies `npm install`
-3. In the `_server` directory, create a new file called `.env`
-4. Copy the contents of `_server/.env.example` into the newly created `.env` file.
-5. Activate the poetry env `poetry shell`, or, if you do not have the poetry shell plugin use `poetry run <the command you want to run>` to run somesomething
-6. In the `_server` directory, run the migrations `python manage.py migrate`
+## Requirements
+I do want to point out that requirements 1 and 2 contradict each other.
+1. You should build a single-page application using React with Django as the backend.
+2. Your app should be multiple pages (using client-side routing)
 
-## Running the appliction
-1. In the `client` directory run `npm run dev`
-2. In the `_server` directory (with your poetry env activated) run `python manage.py runserver`
-3. Visit your application at `http://localhost:8000`
+It is saying I need to build a single page app, but also a multiple page app!
 
-## Using this project for future classes/personal projects
-Many students in the past have chosen to use this starter app template for projects in other classes like CS3450 and for personal projects. I strongly encourage you to do so! Please check with your other instructors before you use this project as a starting point for their classes. You may also want to add your name to the author field in the `pyproject.toml` file.
+Either way, my app satisfies the requirements listed
+- You should build a single-page application using React with Django as the backend.
+	- My app will use react and django to function.
+- Your app should be multiple pages (using client-side routing)
+	- My app will contain multiple pages, such as logging in, sharing scripts, viewing scripts, etc.
+- Your app should require authentication (this is given to you in the starter code)
+	- My app will be able to use authentication to be able to save, publish, and view scripts
+- Your app must be useful
+	- My app intends to teach people assembly in an easy package, which I will say is fairly useful!
+- Your app should have a consistent, intentional design.
+	- The design will be simple, and geometric, but consistent. This is because I am not good at art or design.
+- Your app must use the backend and the database in a meaningful way.
+	- My app will use the backend to save and load scripts that have been published or saved by the user
+	- It will then recall these from the backend when needed.
+
+
+## Group Members
+Just me!
+- A02396436, Wesley Olson
