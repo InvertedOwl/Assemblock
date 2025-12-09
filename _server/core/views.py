@@ -47,6 +47,8 @@ def scripts(req):
                 "updated_at": script.updated_at,
                 "owner": User.objects.get(id=script.owner_id).first_name + " " + User.objects.get(id=script.owner_id).last_name,
                 "favorited": script.favorites_count,
+                "is_favorited": user in script.favorited_by.all(),
+                "is_owner": script.owner == user
             }
             for script in scripts
         ]
