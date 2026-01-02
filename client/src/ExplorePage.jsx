@@ -9,7 +9,7 @@ export const ExplorePage = () => {
     
     useEffect(() => {
         const fetchScripts = async () => {
-            const res = await fetch('/scripts/', {
+            const res = await fetch('/public_scripts/', {
                 credentials: 'same-origin'
             });
             const data = await res.json();

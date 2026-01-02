@@ -18,7 +18,7 @@ export function ScriptPage() {
     const [title, setTitle] = useState("");
     const [favorited, setFavorited] = useState(false);
     
-    const [consoleLines, setConsoleLines] = useState(["test1", "test2"]);
+    const [consoleLines, setConsoleLines] = useState([]);
     
     const [settings, setSettings] = useState({
       numRegisters: 10,

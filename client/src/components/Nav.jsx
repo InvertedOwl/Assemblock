@@ -57,7 +57,7 @@ export const Nav = (props) => {
                 {/* Material symbol icon; the text content (icon name) is required. */}
                 {/* settings moved to Script page */}
 
-                <span className="share">Share</span>
+                {/* <span className="share">Share</span> */}
 
                 {user ? (
                     <span><a href="">{user.first_name}</a></span>

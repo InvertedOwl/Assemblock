@@ -55,6 +55,26 @@ def scripts(req):
         return JsonResponse({"scripts": scripts_list})
 
 @login_required
+def public_scripts(req):
+    if req.method == "GET":
+        from .models import Script
+        scripts = Script.objects.filter(unlisted=False).annotate(favorites_count=Count('favorited_by')).order_by("-updated_at")
+        scripts_list = [
+            {
+                "id": script.id,
+                "title": script.title,
+                "created_at": script.created_at,
+                "updated_at": script.updated_at,
+                "owner": User.objects.get(id=script.owner_id).first_name + " " + User.objects.get(id=script.owner_id).last_name,
+                "favorited": script.favorites_count,
+                "is_favorited": req.user in script.favorited_by.all(),
+                "is_owner": script.owner == req.user
+            }
+            for script in scripts
+        ]
+        return JsonResponse({"scripts": scripts_list})
+
+@login_required
 def script(req):
     if req.method == "POST":
         data = json.loads(req.body)

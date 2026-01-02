@@ -38,7 +38,7 @@ export const SettingsPopup = (props) => {
           /> Unlisted
         </label>
 
-        <button onClick={saveScript}>Save Script</button>
+        <button onClick={saveScript}>Upload Script</button>
       </div>
     </div>
   );
