@@ -58,5 +58,13 @@ a {
 
 
 .title-assemblock {
+    font-size: 20px;
     margin-right:  10px;
+}
+
+.assemblock-logo {
+    width: 25px;
+    height: 25px;
+    margin-right: -5px;
+    margin-left: -15px;
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Nav.css";
+import logo from "../assets/Light_Color_Logo.svg";
 import { Link, NavLink } from "react-router-dom";
 
 export const Nav = (props) => {
@@ -26,6 +27,7 @@ export const Nav = (props) => {
     return (
         <div className="nav-bar">
             <div className="nav-left">
+                <img src={logo} alt="Assemblock Logo" className="assemblock-logo"/>
                 <h2 className="title-assemblock">Assemblock</h2>  
                 <NavLink
                     to="/"
