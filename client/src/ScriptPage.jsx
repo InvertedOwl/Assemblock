@@ -60,8 +60,13 @@ export function ScriptPage() {
             const canvasRect = canvasEl ? canvasEl.getBoundingClientRect() : null;
             const clientX = e.clientX;
             const clientY = e.clientY;
-            const x = canvasRect ? clientX - canvasRect.left - startNodeOffsetX : clientX - startNodeOffsetX;
-            const y = canvasRect ? clientY - canvasRect.top - startNodeOffsetY : clientY - startNodeOffsetY;
+            // Read grid offset from the canvas backgroundPosition (set inline by Canvas)
+            const bgPos = canvasEl ? (canvasEl.style.backgroundPosition || getComputedStyle(canvasEl).backgroundPosition) : "0px 0px";
+            const parts = bgPos.split(" ");
+            const gridX = parseInt(parts[0], 10) || 0;
+            const gridY = parseInt(parts[1], 10) || 0;
+            const x = canvasRect ? clientX - canvasRect.left - startNodeOffsetX - gridX : clientX - startNodeOffsetX - gridX;
+            const y = canvasRect ? clientY - canvasRect.top - startNodeOffsetY - gridY : clientY - startNodeOffsetY - gridY;
 
             newBlocks.push({ children: [nodeCopy], position: { x, y } });
             const newIndex = newBlocks.length - 1;
@@ -78,8 +83,12 @@ export function ScriptPage() {
         const canvasRect = canvasEl ? canvasEl.getBoundingClientRect() : null;
         const clientX = e.clientX;
         const clientY = e.clientY;
-        const x = canvasRect ? clientX - canvasRect.left - (paletteDrag.startNodeOffsetX || 0) : clientX - (paletteDrag.startNodeOffsetX || 0);
-        const y = canvasRect ? clientY - canvasRect.top - (paletteDrag.startNodeOffsetY || 0) : clientY - (paletteDrag.startNodeOffsetY || 0);
+        const bgPos = canvasEl ? (canvasEl.style.backgroundPosition || getComputedStyle(canvasEl).backgroundPosition) : "0px 0px";
+        const parts = bgPos.split(" ");
+        const gridX = parseInt(parts[0], 10) || 0;
+        const gridY = parseInt(parts[1], 10) || 0;
+        const x = canvasRect ? clientX - canvasRect.left - (paletteDrag.startNodeOffsetX || 0) - gridX : clientX - (paletteDrag.startNodeOffsetX || 0) - gridX;
+        const y = canvasRect ? clientY - canvasRect.top - (paletteDrag.startNodeOffsetY || 0) - gridY : clientY - (paletteDrag.startNodeOffsetY || 0) - gridY;
 
         setBlocks((prev) => {
             if (!prev[paletteDrag.blockId]) return prev;
@@ -195,7 +204,7 @@ return (
           favorite
         </button>        
         <input type="text" placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
-        <button>New Script</button>
+        <button className='newscript'>New Script</button>
       </div>
 
 
@@ -223,6 +232,7 @@ return (
       <div className='body'>
         <div className='left'>
 
+            <div className='list'>
             {
               nodes.map((node, index) => (
                 <Node 
@@ -236,6 +246,8 @@ return (
               ))
             }
           
+            </div>
+
         </div>
         <Canvas settings={settings} className='canvas' playing={playing} setPlaying={setPlaying} blocks={blocks} setBlocks={setBlocks} registers={registers} setRegister={setRegister} addConsoleLine={addConsoleLine}></Canvas>
         <div className='right'>

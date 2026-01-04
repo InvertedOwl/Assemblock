@@ -6,6 +6,7 @@ export default function Node(props) {
     const nodeRef = useRef(null);
 
     const handleMouseDown = (e) => {
+        if (e.button !== 0) return;
         if (e.target.closest(".nodrag")) return;
         downRef.current = true;
 

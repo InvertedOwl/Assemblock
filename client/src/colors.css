@@ -1,13 +1,14 @@
 :root {
   /* Define your color palette here */
-  --primary-color: #c9c9c9;
-  --secondary-color: #859744;
-  --accent-color: #859744;
-  --background-color: #859744;
-  --text-color: #ff0000;
-  --muted-color: #ff0000;
-  --canvas-background: #633d56;
+  --primary-color: #070b16;
+  --secondary-color: #32924f;
+  --accent-color: #59c479;
+  --background-color: #070b16;
+  --background-color-rgb: 7, 11, 22;
+  --text-color: #d9d9d9;
+  --muted-color: #d9d9d9;
+  --canvas-background: #131521;
   --canvas-border: #ff0000;
-  --settings-active-bg: #ff0000;
-  --settings-active-color: #0055ff;
+  --settings-active-bg: #ffffff;
+  --settings-active-color: #131521;
 }

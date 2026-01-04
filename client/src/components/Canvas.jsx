@@ -37,7 +37,6 @@ export const Canvas = (props) => {
     }
 
     const toexecute = [];
-    const canvasRef = useRef(null);
     const registersRef = useRef(props.registers);
 
     useEffect(() => {
@@ -95,11 +94,51 @@ export const Canvas = (props) => {
         props.setPlaying(false);
     }
 
+    const canvasRef = useRef(null);
+    const [gridPosition, setGridPosition] = useState({ x: 0, y: 0 });
+    const isDragging = useRef(false);
+    const dragStart = useRef({ x: 0, y: 0 });
+
+    const handleMouseDown = (e) => {
+        if (e.button !== 2) return; // Only allow right-click dragging
+        e.preventDefault();
+        isDragging.current = true;
+        dragStart.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDragging.current) return;
+
+        const deltaX = e.clientX - dragStart.current.x;
+        const deltaY = e.clientY - dragStart.current.y;
+
+        setGridPosition((prev) => ({
+            x: prev.x + deltaX,
+            y: prev.y + deltaY,
+        }));
+
+        dragStart.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handleMouseUp = (e) => {
+        if (e.button !== 2) return; // Only stop dragging on right-click release
+        isDragging.current = false;
+    };
 
     return (
-        <div className="canvas" ref={canvasRef}>
+        <div
+            className="canvas"
+            ref={canvasRef}
+            style={{
+                backgroundPosition: `${gridPosition.x}px ${gridPosition.y}px`,
+            }}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onContextMenu={(e) => e.preventDefault()} // Prevent context menu on right-click
+        >
             {blocks.map((block, index) => (
-                <Block key={index} blocks={blocks} id={index} setBlockData={setBlocks} canvasRef={canvasRef}></Block>
+                <Block key={index} blocks={blocks} id={index} setBlockData={setBlocks} canvasRef={canvasRef} gridoffset={gridPosition}></Block>
             ))}
         </div>
     );

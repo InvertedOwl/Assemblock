@@ -35,6 +35,12 @@ export const Block = (props) => {
     // Handle mouse up even accross entire document
     const handleDocumentUp = (e) => {
         if (!dragRef.current.active) return;
+        // Ensure we finalize the drag for the block that is currently being dragged
+        const currentBlockId = dragRef.current.blockId;
+        if (typeof currentBlockId === "number") {
+            finalizeDragFor(currentBlockId, dragRef.current.nodeIndex, e);
+        }
+
         document.removeEventListener("mousemove", handleDocumentMove);
         document.removeEventListener("mouseup", handleDocumentUp);
         dragRef.current.active = false;
@@ -52,7 +58,7 @@ export const Block = (props) => {
             lastX: e.clientX,
             lastY: e.clientY,
             startX: e.clientX,
-            startY: e.clientY,
+            startY: e.clientY ,
             startNodeOffsetX,
             startNodeOffsetY,
         };
@@ -66,12 +72,13 @@ export const Block = (props) => {
     // So I have to grab their widths after the render.
     // It's kinda gross, but I'd rather do this than having the widths be fixed.
 
-    // Handle un-drag from node
-    function handleDragEnd(nodeIndex, e, nodeRect) {
+    // Finalize drag handling for an arbitrary block index (used for document-level mouseup)
+    function finalizeDragFor(blockId, nodeIndex, e) {
         const canvasRect = props.canvasRef.current?.getBoundingClientRect();
         if (!canvasRect) return;
 
-        const selfBlock = document.querySelector(`.block[data-block-id="${props.id}"]`);
+        const selfBlock = document.querySelector(`.block[data-block-id="${blockId}"]`);
+        if (!selfBlock) return;
 
         const selfBlockRect = selfBlock.getBoundingClientRect();
 
@@ -80,37 +87,40 @@ export const Block = (props) => {
         const selfTop = selfBlockRect.top - canvasRect.top;
         const selfBottom = selfBlockRect.bottom - canvasRect.top;
 
-        const shouldDelete = (() => {
-            const currentX = blockData.position?.x || 0;
-            return (currentX < 0);
-        })();
-
-        if (shouldDelete) {
+        if (selfStart < 0) {
             setBlockData((prevBlocks) => {
                 const newBlocks = [...prevBlocks];
-                if (props.id < 0 || props.id >= newBlocks.length) return prevBlocks;
-                newBlocks.splice(props.id, 1);
+                if (blockId < 0 || blockId >= newBlocks.length) return prevBlocks;
+                newBlocks.splice(blockId, 1);
                 return newBlocks;
             });
             return;
         }
 
-        // Otherwise clamp to canvas as before
+        // Otherwise clamp to canvas, accounting for current grid offset
         setBlockData((prevBlocks) => {
             const newBlocks = [...prevBlocks];
-            const targetBlock = { ...newBlocks[props.id] };
+            if (!newBlocks[blockId]) return prevBlocks;
+            const targetBlock = { ...newBlocks[blockId] };
+            const offsetX = props.gridoffset?.x || 0;
+            const offsetY = props.gridoffset?.y || 0;
+            const maxX = canvasRect.width - (selfBlockRect?.width || 0) - offsetX;
+            const maxY = canvasRect.height - (selfBlockRect?.height || 0) - offsetY;
+            const minX = -offsetX;
+            const minY = -offsetY;
+
             targetBlock.position = {
-                x: Math.min(Math.max(targetBlock.position?.x || 0, 0), canvasRect.width - (selfBlockRect?.width || 0)),
-                y: Math.min(Math.max(targetBlock.position?.y || 0, 0), canvasRect.height - (selfBlockRect?.height || 0)),
+                x: Math.min(Math.max(targetBlock.position?.x || 0, minX), maxX),
+                y: Math.min(Math.max(targetBlock.position?.y || 0, minY), maxY),
             };
-            newBlocks[props.id] = targetBlock;
+            newBlocks[blockId] = targetBlock;
             return newBlocks;
         });
 
         // Search for merge target
         for (let b = 0; b < props.blocks.length; b++) {
             // Ignore self
-            if (b === props.id) continue;
+            if (b === blockId) continue;
 
             const blockEl = document.querySelector(`.block[data-block-id="${b}"]`);
             if (!blockEl) continue;
@@ -131,14 +141,16 @@ export const Block = (props) => {
                 // move all children from block[b] to current block
                 setBlockData((prevBlocks) => {
                     const newBlocks = [...prevBlocks];
+                    // ensure indices still valid
+                    if (!newBlocks[blockId] || !newBlocks[b]) return prevBlocks;
 
-                    const targetBlock = { ...newBlocks[props.id] };
+                    const targetBlock = { ...newBlocks[blockId] };
                     const sourceBlock = { ...newBlocks[b] };
 
                     sourceBlock.children = sourceBlock.children.concat(
                         targetBlock.children
                     );
-                    newBlocks[props.id] = sourceBlock;
+                    newBlocks[blockId] = sourceBlock;
 
                     // Remove source block
                     newBlocks.splice(b, 1);
@@ -146,6 +158,11 @@ export const Block = (props) => {
                 });
             }
         }
+    }
+
+    // Handle un-drag from node (keeps backward compatibility)
+    function handleDragEnd(nodeIndex, e, nodeRect) {
+        finalizeDragFor(props.id, nodeIndex, e);
     }
 
 
@@ -192,8 +209,8 @@ export const Block = (props) => {
             const newBlock = {
                 children: after,
                 position: {
-                    x: cursorX - startNodeOffsetX,
-                    y: cursorY - startNodeOffsetY,
+                    x: cursorX - startNodeOffsetX - (props.gridoffset?.x || 0),
+                    y: cursorY - startNodeOffsetY - (props.gridoffset?.y || 0),
                 },
             };
 
@@ -213,7 +230,7 @@ return (
     className="block"
     data-block-id={props.id}
     style={{
-        transform: `translate(${blockData.position.x}px, ${blockData.position.y}px)`,
+        transform: `translate(${blockData.position.x +  props.gridoffset.x}px, ${blockData.position.y + props.gridoffset.y}px)`,
     }}
     >
         {blockData.children.map((child, index) => (

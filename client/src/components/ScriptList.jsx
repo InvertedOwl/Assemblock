@@ -1,4 +1,5 @@
 import React from 'react';
+import './ScriptList.css';
 
 const ScriptList = ({ scripts }) => {
 
