@@ -26,7 +26,7 @@ export const Nav = (props) => {
     return (
         <div className="nav-bar">
             <div className="nav-left">
-                <h2>Assemblock</h2>  
+                <h2 className="title-assemblock">Assemblock</h2>  
                 <NavLink
                     to="/"
                     className={({ isActive }) =>
