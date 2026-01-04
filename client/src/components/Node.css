@@ -1,6 +1,6 @@
 .node {
     height: 50px;
-    background-color: #f0f0f0;
+    background-color: var(--canvas-background);
     align-items: center;
     display: flex;
     justify-content: center;
@@ -46,7 +46,7 @@
 
 .active {
     box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7);
-    outline: 2px solid #ffffff;
+    outline: 2px solid var(--accent-color);
 }
 
 .title-part-with-param {

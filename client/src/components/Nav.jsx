@@ -60,9 +60,16 @@ export const Nav = (props) => {
                 {/* <span className="share">Share</span> */}
 
                 {user ? (
-                    <span><a href="">{user.first_name}</a></span>
+                    <span>                <NavLink
+                    to="/profile/"
+                    className={({ isActive }) =>
+                        isActive ? "navlink navlink-active" : "navlink"
+                    }
+                >
+                    {user.first_name + " " + user.last_name}
+                </NavLink></span>
                 ) : (
-                    <a href="/login/">Login</a>
+                    <a href="/registration/login">Login</a>
                 )}
             </div>
 

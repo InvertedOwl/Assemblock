@@ -1,8 +1,9 @@
 
+
 .nav-bar {
     width: 100%;
-    background-color: #282c34;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--text-color);
     display: flex;
     align-items: center;
     box-shadow: 1px 10px 24px 0px rgba(0,0,0,0.15);
@@ -27,13 +28,13 @@
 }
 
 a {
-    color: white;
+    color: var(--text-color);
     text-decoration: none;
     font-weight: bold;
 }
 
 .navlink {
-    color: white;
+    color: var(--text-color);
     text-decoration: none;
     font-weight: bold;
     padding: 6px 10px;
@@ -47,8 +48,8 @@ a {
 
 .share {
     user-select: none;
-    background-color: #20242c;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--text-color);
     padding: 6px 12px;
     border: none;
     border-radius: 6px;

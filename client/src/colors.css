@@ -1,0 +1,13 @@
+:root {
+  /* Define your color palette here */
+  --primary-color: #c9c9c9;
+  --secondary-color: #859744;
+  --accent-color: #859744;
+  --background-color: #859744;
+  --text-color: #ff0000;
+  --muted-color: #ff0000;
+  --canvas-background: #633d56;
+  --canvas-border: #ff0000;
+  --settings-active-bg: #ff0000;
+  --settings-active-color: #0055ff;
+}

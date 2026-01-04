@@ -4,6 +4,7 @@ import { ScriptPage } from './ScriptPage.jsx';
 import { ExplorePage } from './ExplorePage.jsx';
 import { Route, Routes } from 'react-router-dom';
 import { CollectionPage } from './CollectionPage.jsx';
+import { ProfilePage } from './ProfilePage.jsx';
 function App() {
  
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<ScriptPage/>}/>
         <Route path="/shared-scripts/" element={<ExplorePage/>}/>
         <Route path="/favorites/" element={<CollectionPage/>}/>
+        <Route path="/profile/" element={<ProfilePage/>}/>
       </Routes>
     </div>
   )
