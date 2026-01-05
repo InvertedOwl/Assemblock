@@ -6,11 +6,16 @@ export const SettingsPopup = (props) => {
   const blocks = props.blocks;
   const title = props.title;
   const [unlisted, setUnlisted] = useState(false);
+  const [turbo, setTurbo] = useState(props.settings?.hyperspeed || false);
   const settings = props.settings;
   const setSettings = props.setSettings;
   const favorited = props.favorited;
 
   const saveScript = props.saveScript;
+
+  useEffect(() => {
+    setTurbo(settings.hyperspeed || false);
+  }, [settings.hyperspeed]);
 
 
   return (
@@ -29,6 +34,17 @@ export const SettingsPopup = (props) => {
               value={settings.executionSpeed} 
               onChange={(e) => setSettings({ ...settings, executionSpeed: e.target.value })} 
             />
+        </label>
+        <label>
+          <input 
+            type="checkbox" 
+            checked={turbo} 
+            onChange={(e) => {
+              const v = e.target.checked;
+              setTurbo(v);
+              setSettings({ ...settings, hyperspeed: v });
+            }} 
+          /> Turbo Mode:
         </label>
         <label>
           <input 

@@ -56,11 +56,6 @@ export const Nav = (props) => {
             </div>
 
             <div className="nav-right">
-                {/* Material symbol icon; the text content (icon name) is required. */}
-                {/* settings moved to Script page */}
-
-                {/* <span className="share">Share</span> */}
-
                 {user ? (
                     <span>                <NavLink
                     to="/profile/"

@@ -2,6 +2,7 @@ import { Block } from "./Block";
 import "./Canvas.css";
 import { color, nodes } from "../nodes.js";
 import { useEffect, useRef, useState } from "react";
+import ExecuteWorker from "../worker/executeWorker?worker";
 
 export const Canvas = (props) => {
     // Blocks state
@@ -13,10 +14,37 @@ export const Canvas = (props) => {
     
     // Use ref to be able to stop async function
     const playingRef = useRef(props.playing);
+    const workerRef = useRef(null);
+    const msgIdRef = useRef(0);
+    const pendingRef = useRef({});
 
     useEffect(() => {
         playingRef.current = props.playing;
     }, [props.playing]);
+
+    useEffect(() => {
+        // initialize worker
+        workerRef.current = new ExecuteWorker();
+        workerRef.current.onmessage = (e) => {
+            const { data } = e;
+            if (!data) return;
+            if (data.type === 'nodeResult') {
+                const resolver = pendingRef.current[data.id];
+                if (resolver) {
+                    resolver(data.payload);
+                    delete pendingRef.current[data.id];
+                }
+            }
+        };
+
+        return () => {
+            if (workerRef.current) {
+                workerRef.current.terminate();
+                workerRef.current = null;
+            }
+            pendingRef.current = {};
+        };
+    }, []);
 
 
     function setNodeActive(blockId, nodeIndex, active = true) {
@@ -66,16 +94,41 @@ export const Canvas = (props) => {
             const block = blocks[item.blockid];
             const node = block.children[item.nodeindex];
 
-            setNodeActive(item.blockid, item.nodeindex, true);
-            await new Promise(r => setTimeout(r, 1/speed * 1000));
-            const result = await node.callback(node.params.map(param => param.value), registersRef.current, props.setRegister, props.addConsoleLine);
-            setNodeActive(item.blockid, item.nodeindex, false);
+            
+            if (!props.settings.hyperspeed) {
+                setNodeActive(item.blockid, item.nodeindex, true);
+                await new Promise(r => setTimeout(r, 1/speed * 1000));
+            }
+
+            // offload node execution to worker
+            const minimalNode = { title: node.title, type: node.type, params: node.params.map(p => p.value) };
+            const result = await new Promise((resolve) => {
+                const id = ++msgIdRef.current;
+                pendingRef.current[id] = resolve;
+                workerRef.current.postMessage({ type: 'execNode', id, node: minimalNode, registers: registersRef.current });
+            });
+
+            // apply register updates returned from worker
+            if (result && result.updates) {
+                for (const u of result.updates) {
+                    props.setRegister(u.reg, u.value);
+                }
+            }
+
+            // apply console lines
+            if (result && result.consoleLines) {
+                for (const line of result.consoleLines) props.addConsoleLine(line);
+            }
+            
+            if (!props.settings.hyperspeed) {
+                setNodeActive(item.blockid, item.nodeindex, false);
+            }
 
             if (!playingRef.current) {
                 return;
             }
 
-            if (node.type === "jump" && result) 
+            if (node.type === "jump" && result && result.jump) 
             {
                 // find label node with matching name
                 for (let bIndex = 0; bIndex < blocks.length; bIndex++) {
@@ -100,7 +153,7 @@ export const Canvas = (props) => {
     const dragStart = useRef({ x: 0, y: 0 });
 
     const handleMouseDown = (e) => {
-        if (e.button !== 2) return; // Only allow right-click dragging
+        if (e.button !== 2) return;
         e.preventDefault();
         isDragging.current = true;
         dragStart.current = { x: e.clientX, y: e.clientY };

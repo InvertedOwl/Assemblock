@@ -19,6 +19,7 @@ export function ScriptPage() {
     const [favorited, setFavorited] = useState(false);
     
     const [consoleLines, setConsoleLines] = useState([]);
+    const MAX_CONSOLE_LINES = 256;
     
     const [settings, setSettings] = useState({
       numRegisters: 10,
@@ -37,7 +38,13 @@ export function ScriptPage() {
     }
 
     const addConsoleLine = (line) => {
-        setConsoleLines((prevLines) => [...prevLines, line]);
+      setConsoleLines((prevLines) => {
+        const newLines = [...prevLines, line];
+        if (newLines.length > MAX_CONSOLE_LINES) {
+          return newLines.slice(newLines.length - MAX_CONSOLE_LINES);
+        }
+        return newLines;
+      });
     }
 
   useEffect(() => {

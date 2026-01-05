@@ -30,7 +30,6 @@ export default function Node(props) {
 
         const { value } = e.target;
 
-        console.log(props.blocks)
 
         props.setBlockData((prevBlocks) =>
             prevBlocks.map((block, bIndex) => {
