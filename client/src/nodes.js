@@ -204,7 +204,7 @@ export function executeNode(node, registers) {
             break;
         }
         default: {
-            // comment/label/start and unknown nodes do nothing
+            // comment/label/start and invalid nodes do nothing
             break;
         }
     }
