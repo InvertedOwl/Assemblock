@@ -2,12 +2,13 @@
     width: 100%;
     height: 100vh;
     margin: 0;
-    overflow: hidden;
+    overflow-x: hidden;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background-color: var(--background-color);
 }
 
 .action-button {
+    margin-bottom: 20px;
     background-color: var(--secondary-color);
     color: var(--text-color);
     border: none;

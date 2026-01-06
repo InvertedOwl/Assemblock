@@ -7,7 +7,7 @@ export const CollectionPage = () => {
     // Get scripts from server with pagination
     const [scripts, setScripts] = useState([]);
     const [page, setPage] = useState(1);
-    const [pageSize] = useState(20);
+    const [pageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export const CollectionPage = () => {
             <br />
             <ScriptList scripts={scripts.filter(script => script.is_owner)} />
             {page < totalPages ? (
-                <div style={{textAlign: 'center', marginTop: 12}}>
+                <div style={{textAlign: 'center', marginTop: 12, marginBottom: 12}}>
                     <button onClick={loadMore} className='action-button'>Load more</button>
                 </div>
             ) : null}

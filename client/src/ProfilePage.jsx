@@ -7,7 +7,7 @@ export const ProfilePage = () => {
     // Get scripts from server with pagination
     const [scripts, setScripts] = useState([]);
     const [page, setPage] = useState(1);
-    const [pageSize] = useState(20);
+    const [pageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
@@ -59,7 +59,7 @@ export const ProfilePage = () => {
             <h2>Your Scripts</h2>
             <ScriptList scripts={scripts} />
             {page < totalPages ? (
-                <div style={{textAlign: 'center', marginTop: 12}}>
+                <div>
                     <button onClick={loadMore} className='action-button'>Load more</button>
                 </div>
             ) : null}

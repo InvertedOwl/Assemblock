@@ -7,7 +7,7 @@ export const ExplorePage = () => {
     // Get scripts from server with pagination
     const [scripts, setScripts] = useState([]);
     const [page, setPage] = useState(1);
-    const [pageSize] = useState(20);
+    const [pageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {

@@ -1,7 +1,12 @@
 
 .scripts-list {
     display: flex;
-    flex-direction: row;
+    flex-direction: row;    
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 20px;
+    width: 100%;
+    align-content: flex-start;
 }
 
 .script-card {

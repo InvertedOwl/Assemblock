@@ -45,9 +45,9 @@ def scripts(req):
         except (ValueError, TypeError):
             page = 1
         try:
-            page_size = int(req.GET.get('page_size', 20))
+            page_size = int(req.GET.get('page_size', 10))
         except (ValueError, TypeError):
-            page_size = 20
+            page_size = 10
 
         queryset = Script.objects.filter(owner=user, unlisted=False).annotate(favorites_count=Count('favorited_by')).order_by("-updated_at")
         paginator = Paginator(queryset, page_size)
@@ -88,9 +88,9 @@ def public_scripts(req):
         except (ValueError, TypeError):
             page = 1
         try:
-            page_size = int(req.GET.get('page_size', 20))
+            page_size = int(req.GET.get('page_size', 10))
         except (ValueError, TypeError):
-            page_size = 20
+            page_size = 10
 
         queryset = Script.objects.filter(unlisted=False).annotate(favorites_count=Count('favorited_by')).order_by("-updated_at")
         paginator = Paginator(queryset, page_size)
