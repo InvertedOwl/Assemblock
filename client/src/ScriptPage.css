@@ -13,26 +13,20 @@
     top: 10px;
     left: 190px;
     z-index: 1000;
-    font-size: 16px;
-    padding: 10px 20px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 8px 16px;
     border: none;
-    border-radius: 25px;
+    border-radius: 20px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease;
+    font-size: 16px;
 }
 .play-button {
     background-color: var(--secondary-color);
-    color: var(--text-color);
-    padding: 12px;
-    border: none;
-    border-radius: 20px;
 }
 .stop-button {
     background-color: var(--accent-color);
-    color: var(--text-color);
-    padding: 12px;
-    border: none;
-    border-radius: 20px;
 }
 
 
@@ -150,6 +144,7 @@
     border: none;
     border-radius: 20px;
     cursor: pointer;
+    font-size: 16px;
     transition: background-color 0.2s ease;
 }
 

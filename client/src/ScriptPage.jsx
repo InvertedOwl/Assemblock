@@ -123,9 +123,16 @@ export function ScriptPage() {
     }, [paletteDrag]);
 
     useEffect(() => {
+        const cookies = parseCookie(document.cookie || "");
+        const scriptId = cookies.script_id;
+
+        // If there's no script_id cookie, treat this as a new script and skip the GET.
+        if (!scriptId) {
+          return;
+        }
 
         const getScript = async () => {
-            const response = await fetch("/script/?id=" + (parseCookie(document.cookie).script_id || ""), {
+            const response = await fetch("/script/?id=" + encodeURIComponent(scriptId), {
             method: "GET",
             credentials: 'same-origin',
             });
@@ -160,13 +167,15 @@ export function ScriptPage() {
       getScript();
     }, []);
   
-  const saveScript = async (updatedFields = {}) => {
+  const saveScript = async (updatedFields = {}, removed = false) => {
     const scriptData = {
       "script_json": blocks,
       "title": title,
       "id": parseCookie(document.cookie).script_id || null,
       "favorited": updatedFields.favorited !== undefined ? updatedFields.favorited : favorited,
       "settings": settings,
+      "unlisted": settings.unlisted || false,
+      "removed": removed,
     };
     const scriptJSON = JSON.stringify(scriptData, null, 2);
 
@@ -185,6 +194,11 @@ export function ScriptPage() {
     if (data.script_id) {
       document.cookie = `script_id=${data.script_id}; path=/;`;
     }
+  }
+
+  const newscript = async () => {
+    document.cookie = `script_id=; path=/;`;
+    window.location.href = '/';
   }
 
   
@@ -208,7 +222,7 @@ return (
           favorite
         </button>        
         <input type="text" placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
-        <button className='newscript'>New Script</button>
+        <button className='newscript' onClick={newscript}>New Script</button>
       </div>
 
 

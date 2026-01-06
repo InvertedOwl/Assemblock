@@ -19,7 +19,11 @@ const ScriptList = ({ scripts }) => {
                         <h2>{script.title}</h2>
                         <h3>{script.owner}</h3>
                         <p className="date">{new Date(script.updated_at).toLocaleDateString()}</p>
-                        <p>Favorites: {script.favorited}</p>
+                        
+                        <div className='bottom-container'>
+                            <p>Favorites: {script.favorited}</p>
+                            {script.is_owner ? <button>Delete</button> : null}
+                        </div>
                     </div>
                 ))
             )}

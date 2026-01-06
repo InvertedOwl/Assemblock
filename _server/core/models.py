@@ -12,6 +12,7 @@ class Script(models.Model):
     unlisted = models.BooleanField(default=False)
     favorited_by = models.ManyToManyField('auth.User', related_name='favorite_scripts', blank=True)
     settings_json = models.JSONField(default=dict)
+    removed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

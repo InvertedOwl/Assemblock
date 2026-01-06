@@ -3,25 +3,26 @@ import './SettingsPopup.css';
 import { parse as parseCookie } from 'cookie';
 
 export const SettingsPopup = (props) => {
-  const blocks = props.blocks;
-  const title = props.title;
-  const [unlisted, setUnlisted] = useState(false);
+  const [unlisted, setUnlisted] = useState(props.settings?.unlisted || false);
   const [turbo, setTurbo] = useState(props.settings?.hyperspeed || false);
   const settings = props.settings;
   const setSettings = props.setSettings;
-  const favorited = props.favorited;
-
   const saveScript = props.saveScript;
 
   useEffect(() => {
     setTurbo(settings.hyperspeed || false);
   }, [settings.hyperspeed]);
 
+  useEffect(() => {
+    setUnlisted(settings.unlisted || false);
+    console.log("unlisted setting changed to ", settings);
+  }, [settings.unlisted]);
+
 
   return (
     <div className="settings-popup" role="dialog" aria-label="Settings">
       <div className="settings-header">
-        <strong>Settings</strong>
+        <h2>Settings</h2>
       </div>
       <div className="settings-body">
         <label>
@@ -44,16 +45,19 @@ export const SettingsPopup = (props) => {
               setTurbo(v);
               setSettings({ ...settings, hyperspeed: v });
             }} 
-          /> Turbo Mode:
+          /> Turbo Mode (beta)
         </label>
         <label>
           <input 
             type="checkbox" 
             checked={unlisted} 
-            onChange={(e) => setUnlisted(e.target.checked)} 
+            onChange={(e) => {
+              const v = e.target.checked;
+              setUnlisted(v);
+              setSettings({ ...settings, unlisted: v });
+            }} 
           /> Unlisted
         </label>
-
         <button onClick={saveScript}>Upload Script</button>
       </div>
     </div>

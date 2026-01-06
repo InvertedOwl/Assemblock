@@ -7,6 +7,7 @@ from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.db.models import Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Load manifest when server launches
 MANIFEST = {}
@@ -38,7 +39,23 @@ def scripts(req):
     if req.method == "GET":
         from .models import Script
         user = req.user
-        scripts = Script.objects.filter(owner=user, unlisted=False).annotate(favorites_count=Count('favorited_by')).order_by("-updated_at")
+        # Pagination params
+        try:
+            page = int(req.GET.get('page', 1))
+        except (ValueError, TypeError):
+            page = 1
+        try:
+            page_size = int(req.GET.get('page_size', 20))
+        except (ValueError, TypeError):
+            page_size = 20
+
+        queryset = Script.objects.filter(owner=user, unlisted=False).annotate(favorites_count=Count('favorited_by')).order_by("-updated_at")
+        paginator = Paginator(queryset, page_size)
+        try:
+            page_obj = paginator.page(page)
+        except (EmptyPage, PageNotAnInteger):
+            page_obj = paginator.page(1)
+
         scripts_list = [
             {
                 "id": script.id,
@@ -50,15 +67,38 @@ def scripts(req):
                 "is_favorited": user in script.favorited_by.all(),
                 "is_owner": script.owner == user
             }
-            for script in scripts
+            for script in page_obj.object_list
         ]
-        return JsonResponse({"scripts": scripts_list})
+
+        return JsonResponse({
+            "scripts": scripts_list,
+            "page": page_obj.number,
+            "page_size": page_size,
+            "total_pages": paginator.num_pages,
+            "total_count": paginator.count
+        })
 
 @login_required
 def public_scripts(req):
     if req.method == "GET":
         from .models import Script
-        scripts = Script.objects.filter(unlisted=False).annotate(favorites_count=Count('favorited_by')).order_by("-updated_at")
+        # Pagination params
+        try:
+            page = int(req.GET.get('page', 1))
+        except (ValueError, TypeError):
+            page = 1
+        try:
+            page_size = int(req.GET.get('page_size', 20))
+        except (ValueError, TypeError):
+            page_size = 20
+
+        queryset = Script.objects.filter(unlisted=False).annotate(favorites_count=Count('favorited_by')).order_by("-updated_at")
+        paginator = Paginator(queryset, page_size)
+        try:
+            page_obj = paginator.page(page)
+        except (EmptyPage, PageNotAnInteger):
+            page_obj = paginator.page(1)
+
         scripts_list = [
             {
                 "id": script.id,
@@ -70,9 +110,16 @@ def public_scripts(req):
                 "is_favorited": req.user in script.favorited_by.all(),
                 "is_owner": script.owner == req.user
             }
-            for script in scripts
+            for script in page_obj.object_list
         ]
-        return JsonResponse({"scripts": scripts_list})
+
+        return JsonResponse({
+            "scripts": scripts_list,
+            "page": page_obj.number,
+            "page_size": page_size,
+            "total_pages": paginator.num_pages,
+            "total_count": paginator.count
+        })
 
 @login_required
 def script(req):
@@ -84,6 +131,7 @@ def script(req):
         unlisted = data.get("unlisted", False)
         favorited = data.get("favorited", None)
         settings = data.get("settings", {})
+        removed = data.get("removed", False)
 
         from .models import Script
 
@@ -101,23 +149,25 @@ def script(req):
         if script_pk:
             try:
                 script = Script.objects.get(id=script_pk)
-                if script.owner != req.user:
-                    return JsonResponse({"error": "You do not own this script and cannot modify it."}, status=403)
 
-                # Update the script if the user owns it
-                script.script_json = script_json
-                script.title = title
-                script.unlisted = unlisted
-                script.settings_json = settings
-
-                # Handle favorited logic
+                # Always allow toggling favorites for the current user.
                 if favorited is not None:
                     if favorited:
                         script.favorited_by.add(req.user)
                     else:
                         script.favorited_by.remove(req.user)
 
-                script.save()
+                # Only the owner may modify the script content or metadata.
+                if script.owner == req.user:
+                    script.script_json = script_json
+                    script.title = title
+                    script.unlisted = unlisted
+                    script.settings_json = settings
+                    script.removed = removed
+                    script.save()
+                else:
+                    # Non-owners may not change other fields; ignore them and return success.
+                    pass
             except Script.DoesNotExist:
                 return JsonResponse({"error": "Script not found."}, status=404)
         else:

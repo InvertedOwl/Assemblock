@@ -16,3 +16,10 @@
     cursor: pointer;
     user-select: none;
 }
+
+.bottom-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
