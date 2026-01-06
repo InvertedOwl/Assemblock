@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import ScriptList from './components/ScriptList';
 
 export const CollectionPage = () => {
-    // Get scripts from server with pagination
+    // Get scripts from server
     const [scripts, setScripts] = useState([]);
     const [page, setPage] = useState(1);
     const [pageSize] = useState(10);
