@@ -19,9 +19,22 @@ export const ProfilePage = () => {
         fetchScripts();
     }, []);
 
+
+    const handleLogout = async () => {
+        await fetch('/registration/logout', {
+            method: 'GET',
+            credentials: 'same-origin'
+        });
+        window.location.href = '/';
+    }
+
     return (
         <div className="profile-page">
             <h1>Profile</h1>
+
+            <div>
+                <button onClick={() => {handleLogout()}} className='action-button'>Logout</button>
+            </div>
             <p>Manage your profile and view your scripts.</p>
             <br />
 

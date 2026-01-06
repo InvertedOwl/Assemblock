@@ -6,20 +6,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    body, html {
-      height: 100%;
+    :root {
+      --primary-color: #070b16;
+      --secondary-color: #32924f;
+      --accent-color: #59c479;
+      --background-color: #070b16;
+      --light-background-color: #070b16;
+      --background-color-rgb: 7, 11, 22;
+      --text-color: #d9d9d9;
+      --muted-color: #d9d9d9;
+      --canvas-background: #131521;
+      --canvas-border: #ff0000;
+      --settings-active-bg: #ffffff;
+      --settings-active-color: #131521;
+    }
+
+    .app {
+      width: 100%;
+      height: 100vh;
       margin: 0;
-      font-family: Arial, sans-serif;
+      overflow: hidden;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      background-color: #282c34;
-      color: white;
+    }
+
+    .content {
+      margin: 20px;
+      background-color: var(--canvas-background);
+      padding: 20px;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .input {
+      display: flex; 
+      flex-direction: column; 
+      align-items: center;
+      margin: 4px;
+    }
+
+    .link {
+      color: var(--accent-color);
+      margin-top: 10px;
+    }
+
+    .input > input {
+      margin-top: 5px;
+      padding: 4px;
+      border: 1px solid var(--muted-color);
+      border-radius: 5px;
+      width: 200px;
+    }
+
+    .action-button {
+      margin: 10px;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 20px;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
     }
   </style>
 </head>
 <body>
-  {% block content %}
-  {% endblock %}
+  <div class="app">
+    <div class="title">
+      <img src="/static/src/assets/Light_Color_Logo.svg" alt="" width="50">
+      <h1>Assemblock</h1>
+    </div>
+
+    <div class="content">
+      {% block content %}
+      {% endblock %}
+    </div>
+
+  </div>
 </body>
 </html>

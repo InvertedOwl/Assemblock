@@ -27,8 +27,10 @@ export const Nav = (props) => {
     return (
         <div className="nav-bar">
             <div className="nav-left">
-                <img src={logo} alt="Assemblock Logo" className="assemblock-logo"/>
-                <h2 className="title-assemblock">Assemblock</h2>  
+                <NavLink to="/" className={() => "title-container"}>
+                    <img src={logo} alt="Assemblock Logo" className="assemblock-logo"/>
+                    <h2 className="title-assemblock">Assemblock</h2>  
+                </NavLink>
                 <NavLink
                     to="/"
                     className={({ isActive }) =>

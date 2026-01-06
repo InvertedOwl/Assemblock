@@ -123,7 +123,6 @@ export function ScriptPage() {
     }, [paletteDrag]);
 
     useEffect(() => {
-      console.log(parseCookie(document.cookie).script_id);
 
         const getScript = async () => {
             const response = await fetch("/script/?id=" + (parseCookie(document.cookie).script_id || ""), {
@@ -186,8 +185,6 @@ export function ScriptPage() {
     if (data.script_id) {
       document.cookie = `script_id=${data.script_id}; path=/;`;
     }
-
-    console.log(scriptJSON);
   }
 
   
@@ -231,7 +228,6 @@ return (
         onClick={() => {
             setPlaying((prev) => !prev)
             setRegisters(() => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-            console.log("Clicked play/stop " + settings.executionSpeed)
           }}>{playing ? "Stop" : "Play"}</button>
 
 

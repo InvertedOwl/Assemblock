@@ -68,3 +68,10 @@ a {
     margin-right: -5px;
     margin-left: -15px;
 }
+
+.title-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+}

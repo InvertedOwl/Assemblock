@@ -7,6 +7,17 @@
     background-color: var(--background-color);
 }
 
+.action-button {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 15px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
 input {
     background-color: rgba(var(--background-color-rgb), 0.6);
     color: var(--text-color);
