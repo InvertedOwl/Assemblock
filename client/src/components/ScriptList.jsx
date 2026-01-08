@@ -16,7 +16,7 @@ const ScriptList = ({ scripts }) => {
             ) : (
                 scripts.map((script, index) => (
                     <div key={index} className="script-card" onClick={sendToScriptPage.bind(null, script.id)}>
-                        <h2>{script.title}</h2>
+                        <h2>{script.title || "Untitled"}</h2>
                         <h3>{script.owner}</h3>
                         <p className="date">{new Date(script.updated_at).toLocaleDateString()}</p>
                         
