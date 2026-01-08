@@ -12,6 +12,7 @@
     padding: 10px;
     display: flex;
     justify-content: space-between;
+    height: 35px;
 }
 
 .nav-left {

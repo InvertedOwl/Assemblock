@@ -1,6 +1,5 @@
 import { Block } from "./Block";
 import "./Canvas.css";
-import { color, nodes } from "../nodes.js";
 import { useEffect, useRef, useState } from "react";
 import ExecuteWorker from "../worker/executeWorker?worker";
 

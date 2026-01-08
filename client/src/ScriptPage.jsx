@@ -204,7 +204,7 @@ export function ScriptPage() {
   
 
 return (
-    <div className="app">
+    <div className="app scriptpage">
 
       <div className='title'>
         
@@ -268,6 +268,12 @@ return (
         </div>
         <Canvas settings={settings} className='canvas' playing={playing} setPlaying={setPlaying} blocks={blocks} setBlocks={setBlocks} registers={registers} setRegister={setRegister} addConsoleLine={addConsoleLine}></Canvas>
         <div className='right'>
+
+          <div className='rightnav'>
+            <button>Console</button>
+            <button>Registers</button>
+            <button>Memory</button>
+          </div>
           <Registers registers={registers}></Registers>
           <Console lines={consoleLines}></Console>
         </div>
