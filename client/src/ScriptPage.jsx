@@ -109,16 +109,16 @@ export function ScriptPage() {
 
         function onUp() {
         setPaletteDrag(null);
-        document.removeEventListener('mousemove', onMove);
-        document.removeEventListener('mouseup', onUp);
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
         }
 
         document.addEventListener('mousemove', onMove);
         document.addEventListener('mouseup', onUp);
 
         return () => {
-        document.removeEventListener('mousemove', onMove);
-        document.removeEventListener('mouseup', onUp);
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
         };
     }, [paletteDrag]);
 
@@ -126,7 +126,7 @@ export function ScriptPage() {
         const cookies = parseCookie(document.cookie || "");
         const scriptId = cookies.script_id;
 
-        // If there's no script_id cookie, treat this as a new script and skip the GET.
+        // If no id, then new script and dont apply any saved data
         if (!scriptId) {
           return;
         }
