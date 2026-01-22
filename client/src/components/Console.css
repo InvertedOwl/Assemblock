@@ -8,7 +8,7 @@
 }
 
 .console-output {
-    height: 150px;
+    height: 250px;
     overflow-y: auto;
     background-color: var(--canvas-background);
     padding: 10px;
