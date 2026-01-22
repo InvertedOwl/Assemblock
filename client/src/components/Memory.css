@@ -1,0 +1,40 @@
+.memory-container {
+    color: var(--text-color);
+    margin: 20px;
+    background-color: var(--background-color);
+    border-radius: 15px;
+    font-family: monospace;
+    font-size: 15px;
+}
+
+.memory-output {
+    background-color: var(--canvas-background);
+    padding: 10px;
+    border-radius: 15px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.memory-table {
+    margin-bottom: 5px;
+}
+
+.memory-output p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.unset {
+    color: var(--muted-color);
+}
+
+.set {
+    cursor: pointer;
+}
+
+.translation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

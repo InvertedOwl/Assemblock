@@ -8,3 +8,10 @@
     font-size: 15px;
     margin-top: 0px;
 }
+
+.register-title {
+    color: var(--text-color);
+    font-family: monospace;
+    padding-bottom: 10px;
+    font-size: 22px;
+}

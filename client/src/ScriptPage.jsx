@@ -6,6 +6,7 @@ import './ScriptPage.css'
 import { nodes } from './nodes.js';
 import { Registers } from './components/Registers.jsx';
 import { Console } from './components/Console.jsx';
+import { Memory } from './components/Memory.jsx';
 import { parse as parseCookie } from 'cookie';
 
 export function ScriptPage() {
@@ -21,11 +22,16 @@ export function ScriptPage() {
     const [consoleLines, setConsoleLines] = useState([]);
     const MAX_CONSOLE_LINES = 256;
     
+    const [memory, setMemory] = useState({2: 42, 5: 99});
+    const MAX_MEMORY_CELLS = 128;
+    
     const [settings, setSettings] = useState({
       numRegisters: 10,
       executionSpeed: 500,
       hyperspeed: false,
     });
+
+    const [rightNavPage, setRightNavPage] = useState('console');
     
     const [registers, setRegisters] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
@@ -270,12 +276,19 @@ return (
         <div className='right'>
 
           <div className='rightnav'>
-            <button>Console</button>
-            <button>Registers</button>
-            <button>Memory</button>
+            <button onClick={() => setRightNavPage("console")}>Console</button>
+            <button onClick={() => setRightNavPage("registers")}>Registers</button>
+            <button onClick={() => setRightNavPage("memory")}>Memory</button>
           </div>
-          <Registers registers={registers}></Registers>
-          <Console lines={consoleLines}></Console>
+          <div className='console' style={{ display: rightNavPage === 'console' ? 'block' : 'none' }}>
+            <Console lines={consoleLines}></Console>
+          </div>
+          <div className='registers' style={{ display: rightNavPage === 'registers' ? 'block' : 'none' }}>
+            <Registers registers={registers}></Registers>
+          </div>
+          <div className='memory' style={{ display: rightNavPage === 'memory' ? 'block' : 'none' }}>
+            <Memory memory={memory}></Memory>
+          </div>
         </div>
       </div>
 
