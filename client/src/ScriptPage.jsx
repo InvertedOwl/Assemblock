@@ -285,9 +285,9 @@ return (
         <div className='right'>
 
           <div className='rightnav'>
-            <button onClick={() => setRightNavPage("console")}>Console</button>
-            <button onClick={() => setRightNavPage("registers")}>Registers</button>
-            <button onClick={() => setRightNavPage("memory")}>Memory</button>
+            <button className={rightNavPage === "console" ? "rightnav-button rightnav-active" : "rightnav-button"} onClick={() => setRightNavPage("console")}>Console</button>
+            <button className={rightNavPage === "registers" ? "rightnav-button rightnav-active" : "rightnav-button"} onClick={() => setRightNavPage("registers")}>Registers</button>
+            <button className={rightNavPage === "memory" ? "rightnav-button rightnav-active" : "rightnav-button"} onClick={() => setRightNavPage("memory")}>Memory</button>
           </div>
           <div className='console' style={{ display: rightNavPage === 'console' ? 'block' : 'none' }}>
             <Console lines={consoleLines}></Console>

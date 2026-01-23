@@ -2,21 +2,23 @@
 const color = {
     "comment": "#adb5bd",
     "start": "#06d6a0",
-    "normal": "#f1c253ff",
-    "special": "#8B85C1",
+    "normal": "#FFD166",
+    "special": "#712F79",
     "label": "#ef476f",
     "action": "#118AB2",
 };
 
 const nodes = [
     // Comment
-    {"title": "Comment", "text": "<param>", "params": [{"type": "text", "value": "This is a comment", "name": "comment", "width": 100}], "callback": () => {}, "type": "comment", "color": color.comment, "active": false},
+    {"title": "Comment", "text": "<param>", "params": [{"type": "text", "value": "This is a comment", "name": "comment", "width": 120}], "callback": () => {}, "type": "comment", "color": color.comment, "active": false},
 
     // Triggers
     {"title": "Start", "params": [], "callback": () => {}, "type": "start", "color": color.start, "active": false},
 
+    {"title": "User Input", "text": "Input > $<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}], "callback": () => {}, "type": "start", "color": color.start, "active": false},
+
     // Register edit
-    {"title": "AddI", "text": "$<param> = $<param> + <param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel", max: 32768}], "callback": 
+    {"title": "AddI", "text": "$<param> < $<param>+<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel", max: 32768}], "callback": 
     (params, registers, memory, setRegister, addToConsole, setMemory) => {
         const pvals = (params || []).map(p => (p && typeof p === 'object') ? p.value : p);
         const n = (v) => { const x = Number(v); return Number.isNaN(x) ? 0 : x };
@@ -30,7 +32,7 @@ const nodes = [
         if (addToConsole) consoleLines.forEach(l => addToConsole(l));
         return (setRegister || addToConsole) ? jump : { updates, consoleLines, jump };
     }, "type": "normal", "color": color.normal, "active": false}, 
-    {"title": "Add", "text": "$<param> = $<param> + $<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}], "callback": 
+    {"title": "Add", "text": "$<param> < $<param> + $<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}], "callback": 
     (params, registers, memory, setRegister, addToConsole, setMemory) => {
         const pvals = (params || []).map(p => (p && typeof p === 'object') ? p.value : p);
         const n = (v) => { const x = Number(v); return Number.isNaN(x) ? 0 : x };
@@ -44,7 +46,7 @@ const nodes = [
         if (addToConsole) consoleLines.forEach(l => addToConsole(l));
         return (setRegister || addToConsole) ? jump : { updates, consoleLines, jump };
     }, "type": "normal", "color": color.normal, "active": false}, 
-    {"title": "Subtract", "text": "$<param> = $<param> - $<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}], "callback": 
+    {"title": "Subtract", "text": "$<param> < $<param> - $<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}], "callback": 
     (params, registers, memory, setRegister, addToConsole, setMemory) => {
         const pvals = (params || []).map(p => (p && typeof p === 'object') ? p.value : p);
         const n = (v) => { const x = Number(v); return Number.isNaN(x) ? 0 : x };
@@ -58,7 +60,7 @@ const nodes = [
         if (addToConsole) consoleLines.forEach(l => addToConsole(l));
         return (setRegister || addToConsole) ? jump : { updates, consoleLines, jump };
     }, "type": "normal", "color": color.normal, "active": false}, 
-    {"title": "Multiply", "text": "$<param> = $<param> x $<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}], "callback": 
+    {"title": "Multiply", "text": "$<param> < $<param> * $<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}], "callback": 
     (params, registers, memory, setRegister, addToConsole, setMemory) => {
         const pvals = (params || []).map(p => (p && typeof p === 'object') ? p.value : p);
         const n = (v) => { const x = Number(v); return Number.isNaN(x) ? 0 : x };
@@ -72,7 +74,7 @@ const nodes = [
         if (addToConsole) consoleLines.forEach(l => addToConsole(l));
         return (setRegister || addToConsole) ? jump : { updates, consoleLines, jump };
     }, "type": "normal", "color": color.normal, "active": false},
-    {"title": "Divide", "text": "$<param> = $<param> / $<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}], "callback": 
+    {"title": "Divide", "text": "$<param> < $<param> / $<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}], "callback": 
     (params, registers, memory, setRegister, addToConsole, setMemory) => {
         const pvals = (params || []).map(p => (p && typeof p === 'object') ? p.value : p);
         const n = (v) => { const x = Number(v); return Number.isNaN(x) ? 0 : x };
@@ -87,7 +89,7 @@ const nodes = [
         return (setRegister || addToConsole) ? jump : { updates, consoleLines, jump };
     }, "type": "normal", "color": color.normal, "active": false},
 
-        {"title": "Load", "text": "$<param> <- #<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}], "callback": 
+        {"title": "LoadI", "text": "$<param> < [<param>]", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel", "max": "64"}], "callback": 
     (params, registers, memory, setRegister, addToConsole, setMemory) => {
         const pvals = (params || []).map(p => (p && typeof p === 'object') ? p.value : p);
         const n = (v) => { const x = Number(v); return Number.isNaN(x) ? 0 : x };
@@ -101,13 +103,13 @@ const nodes = [
         return (setRegister || addToConsole) ? jump : { updates, consoleLines, jump };
     }, "type": "normal", "color": color.normal, "active": false},
 
-        {"title": "Store", "text": "$<param> -> #<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}], "callback": 
+        {"title": "StoreI", "text": "$<param> > [<param>]", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel", "max": "64"}], "callback": 
     (params, registers, memory, setRegister, addToConsole, setMemory) => {
         const pvals = (params || []).map(p => (p && typeof p === 'object') ? p.value : p);
         const n = (v) => { const x = Number(v); return Number.isNaN(x) ? 0 : x };
         const target = n(pvals[0]);
         const a = n(pvals[1]);
-        const updates = [{ reg: target, value: memory[a] }];
+        const updates = [{}];
         const memoryUpdates = [{ address: a, value: registers[target] || 0}];
         const consoleLines = [];
         const jump = false;
@@ -115,6 +117,35 @@ const nodes = [
         if (addToConsole) consoleLines.forEach(l => addToConsole(l));
         if (setMemory) memoryUpdates.forEach(m => setMemory(m.address, m.value));
         return (setRegister || addToConsole || setMemory) ? jump : { updates, consoleLines, jump, setMemory: memoryUpdates };
+    }, "type": "normal", "color": color.normal, "active": false},
+
+            {"title": "LoadD", "text": "$<param> < [$<param>]", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}], "callback": 
+    (params, registers, memory, setRegister, addToConsole, setMemory) => {
+        const pvals = (params || []).map(p => (p && typeof p === 'object') ? p.value : p);
+        const n = (v) => { const x = Number(v); return Number.isNaN(x) ? 0 : x };
+        const target = n(pvals[0]);
+        const a = n(pvals[1]);
+        const val = registers && (registers[a] || 0);
+        const updates = [{ reg: target, value: memory[val] }];
+        const consoleLines = [];
+        const jump = false;
+        if (setRegister) updates.forEach(u => setRegister(u.reg, u.value));
+        if (addToConsole) consoleLines.forEach(l => addToConsole(l));
+        return (setRegister || addToConsole) ? jump : { updates, consoleLines, jump };
+    }, "type": "normal", "color": color.normal, "active": false},
+                {"title": "StoreD", "text": "$<param> > [$<param>]", "params": [{"type": "number", "value": "0", "name": "tolabel"}, {"type": "number", "value": 0, "name": "tolabel"}], "callback": 
+    (params, registers, memory, setRegister, addToConsole, setMemory) => {
+        const pvals = (params || []).map(p => (p && typeof p === 'object') ? p.value : p);
+        const n = (v) => { const x = Number(v); return Number.isNaN(x) ? 0 : x };
+        const target = n(pvals[0]);
+        const a = n(pvals[1]);
+        const val = registers && (registers[a] || 0);
+        const updates = [{ reg: target, value: memory[val] }];
+        const consoleLines = [];
+        const jump = false;
+        if (setRegister) updates.forEach(u => setRegister(u.reg, u.value));
+        if (addToConsole) consoleLines.forEach(l => addToConsole(l));
+        return (setRegister || addToConsole) ? jump : { updates, consoleLines, jump };
     }, "type": "normal", "color": color.normal, "active": false},
     
 

@@ -96,7 +96,7 @@ export default function Node(props) {
                                 <input
                                     className={"param nodrag"}
                                     style={{
-                                        width: params[paramIndex].width || (params[paramIndex].type === "number" ? Math.log10(params[paramIndex].max || 7) * 7 : undefined)
+                                        width: params[paramIndex].width || (params[paramIndex].type === "number" ? Math.log10(params[paramIndex].max || 9) * 7.5 : undefined)
                                     }}
                                     type={params[paramIndex].type === "number" ? "number" : "text"}
                                     value={
