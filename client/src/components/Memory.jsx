@@ -25,7 +25,7 @@ export const Memory = (props) => {
                     </thead>
                     <tbody>
 
-                    {Array.from({ length: 16 }, (_, i) => i * 4 ).map(num => ( // TEMP MAX MEMORY CELLS
+                    {Array.from({ length: props.maxMemoryCells/4 }, (_, i) => i * 4 ).map(num => ( // TEMP MAX MEMORY CELLS
                         <tr key={num}>
                             <td className="memory-location">{"#" + num.toString(16).padStart(2, "0")}</td>
                             <td className={"memory-value " + (props.memory[num] === undefined ? "unset" : "set")} onClick={() => handleCellClick(num)}>{props.memory[num] === undefined ? "00" : props.memory[num].toString(16).padStart(2, "0")}</td>

@@ -11,7 +11,7 @@
     user-select: none;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5);
     padding: 0px 2px;
-    transition: outline 0.2s ease, box-shadow 0.2s ease;
+    transition: outline 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
     min-width: 65px;
     width: fit-content;
     white-space: normal;

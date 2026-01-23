@@ -65,10 +65,15 @@ export const Canvas = (props) => {
 
     const toexecute = [];
     const registersRef = useRef(props.registers);
+    const memoryRef = useRef(props.memory);
 
     useEffect(() => {
         registersRef.current = props.registers;
     }, [props.registers]);
+
+    useEffect(() => {
+        memoryRef.current = props.memory;
+    }, [props.memory]);
 
     useEffect(() => {
         if (props.playing) {
@@ -94,18 +99,15 @@ export const Canvas = (props) => {
             const node = block.children[item.nodeindex];
 
             
-            if (!props.settings.hyperspeed) {
-                setNodeActive(item.blockid, item.nodeindex, true);
-                await new Promise(r => setTimeout(r, 1/speed * 1000));
-            }
-
+            
             // offload node execution to worker
             const minimalNode = { title: node.title, type: node.type, params: node.params.map(p => p.value) };
             const result = await new Promise((resolve) => {
                 const id = ++msgIdRef.current;
                 pendingRef.current[id] = resolve;
-                workerRef.current.postMessage({ type: 'execNode', id, node: minimalNode, registers: registersRef.current });
+                workerRef.current.postMessage({ type: 'execNode', id, node: minimalNode, registers: registersRef.current, memory: memoryRef.current });
             });
+            
 
             // apply register updates returned from worker
             if (result && result.updates) {
@@ -118,8 +120,16 @@ export const Canvas = (props) => {
             if (result && result.consoleLines) {
                 for (const line of result.consoleLines) props.addConsoleLine(line);
             }
+
+            if (result && result.setMemory) {
+                for (const m of result.setMemory) {
+                    props.setMemory(m.address, m.value);
+                }
+            }
             
             if (!props.settings.hyperspeed) {
+                setNodeActive(item.blockid, item.nodeindex, true);
+                await new Promise(r => setTimeout(r, 1/speed * 1000));
                 setNodeActive(item.blockid, item.nodeindex, false);
             }
 

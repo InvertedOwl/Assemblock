@@ -22,8 +22,8 @@ export function ScriptPage() {
     const [consoleLines, setConsoleLines] = useState([]);
     const MAX_CONSOLE_LINES = 256;
     
-    const [memory, setMemory] = useState({2: 42, 5: 99});
-    const MAX_MEMORY_CELLS = 128;
+    const [memory, setMemories] = useState({});
+    const MAX_MEMORY_CELLS = 64;
     
     const [settings, setSettings] = useState({
       numRegisters: 10,
@@ -40,6 +40,14 @@ export function ScriptPage() {
             const newRegisters = [...prevRegisters];
             newRegisters[index] = value;
             return newRegisters;
+        });
+    }
+
+    const setMemory = (address, value) => {
+        setMemories((prevMemory) => {
+            const newMemory = { ...prevMemory };
+            newMemory[address] = value;
+            return newMemory;
         });
     }
 
@@ -248,6 +256,7 @@ return (
         onClick={() => {
             setPlaying((prev) => !prev)
             setRegisters(() => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            setMemories(() => ({}));
           }}>{playing ? "Stop" : "Play"}</button>
 
 
@@ -272,7 +281,7 @@ return (
             </div>
 
         </div>
-        <Canvas settings={settings} className='canvas' playing={playing} setPlaying={setPlaying} blocks={blocks} setBlocks={setBlocks} registers={registers} setRegister={setRegister} addConsoleLine={addConsoleLine}></Canvas>
+        <Canvas settings={settings} className='canvas' playing={playing} setPlaying={setPlaying} blocks={blocks} setBlocks={setBlocks} registers={registers} setRegister={setRegister} addConsoleLine={addConsoleLine} memory={memory} setMemory={setMemory} ></Canvas>
         <div className='right'>
 
           <div className='rightnav'>
@@ -287,7 +296,7 @@ return (
             <Registers registers={registers}></Registers>
           </div>
           <div className='memory' style={{ display: rightNavPage === 'memory' ? 'block' : 'none' }}>
-            <Memory memory={memory}></Memory>
+            <Memory memory={memory} maxMemoryCells={MAX_MEMORY_CELLS}></Memory>
           </div>
         </div>
       </div>
