@@ -9,6 +9,38 @@ const ScriptList = ({ scripts }) => {
         window.location.href = '/';
     }
 
+    const deleteScript = (scriptId, e) => {
+        e.stopPropagation();
+        const getCookie = (name) => {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        };
+        const csrftoken = getCookie('csrftoken');
+
+        const res = fetch(`/script/`, {
+            method: 'DELETE',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken || ''
+            },
+            body: JSON.stringify({ id: scriptId })
+        });
+
+        res.then(response => {
+            if (response.ok) {
+                console.log('Script deleted successfully');
+                window.location.reload();
+            } else {
+                console.error('Failed to delete script');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    };
+
     return (
         <div className='scripts-list'>
             {scripts.length === 0 ? (
@@ -22,7 +54,7 @@ const ScriptList = ({ scripts }) => {
                         
                         <div className='bottom-container'>
                             <p>Favorites: {script.favorited}</p>
-                            {script.is_owner ? <button>Delete</button> : null}
+                            {script.is_owner ? <button onClick={(e) => deleteScript(script.id, e)}>Delete</button> : null}
                         </div>
                     </div>
                 ))

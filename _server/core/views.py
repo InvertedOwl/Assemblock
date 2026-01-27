@@ -49,7 +49,7 @@ def scripts(req):
         except (ValueError, TypeError):
             page_size = 10
 
-        queryset = Script.objects.filter(owner=user, unlisted=False).annotate(favorites_count=Count('favorited_by')).order_by("-updated_at")
+        queryset = Script.objects.filter(owner=user, unlisted=False, removed=False).annotate(favorites_count=Count('favorited_by')).order_by("-updated_at")
         paginator = Paginator(queryset, page_size)
         try:
             page_obj = paginator.page(page)
@@ -92,7 +92,7 @@ def public_scripts(req):
         except (ValueError, TypeError):
             page_size = 10
 
-        queryset = Script.objects.filter(unlisted=False).annotate(favorites_count=Count('favorited_by')).order_by("-updated_at")
+        queryset = Script.objects.filter(unlisted=False, removed=False).annotate(favorites_count=Count('favorited_by')).order_by("-updated_at")
         paginator = Paginator(queryset, page_size)
         try:
             page_obj = paginator.page(page)
@@ -202,6 +202,9 @@ def script(req):
 
         try:
             script = Script.objects.get(id=script_pk)
+            # Never return scripts marked as removed
+            if getattr(script, "removed", False):
+                return JsonResponse({"error": "Script not found."}, status=404)
             response_data = {
                 "id": script.id,
                 "title": script.title,
@@ -223,5 +226,40 @@ def script(req):
                 }
 
             return JsonResponse(response_data)
+        except Script.DoesNotExist:
+            return JsonResponse({"error": "Script not found."}, status=404)
+    elif req.method == "DELETE":
+        print("Received DELETE request for script")
+        # Expect JSON body with {"id": <script_id>} to delete a script
+        try:
+            data = json.loads(req.body)
+        except (ValueError, TypeError):
+            return JsonResponse({"error": "Invalid JSON body."}, status=400)
+
+        script_id = data.get("id")
+        if script_id is None or script_id == "":
+            return JsonResponse({"error": "Missing script id in request body."}, status=400)
+
+        try:
+            script_pk = int(script_id)
+        except (ValueError, TypeError):
+            return JsonResponse({"error": "Invalid script id. Expected integer."}, status=400)
+
+        from .models import Script
+
+        try:
+            script = Script.objects.get(id=script_pk)
+            # Only the owner can delete the script
+            if script.owner != req.user:
+                return JsonResponse({"error": "Permission denied. Only owner can delete."}, status=403)
+
+            # Prefer soft-delete when `removed` field exists, otherwise hard delete
+            if hasattr(script, "removed"):
+                script.removed = True
+                script.save()
+            else:
+                script.delete()
+
+            return JsonResponse({"success": True})
         except Script.DoesNotExist:
             return JsonResponse({"error": "Script not found."}, status=404)
