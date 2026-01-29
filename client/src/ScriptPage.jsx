@@ -24,6 +24,8 @@ export function ScriptPage() {
     
     const [memory, setMemories] = useState({});
     const MAX_MEMORY_CELLS = 64;
+
+    const [isOwner, setIsOwner] = useState(false);
     
     const [settings, setSettings] = useState({
       numRegisters: 10,
@@ -163,6 +165,9 @@ export function ScriptPage() {
               hyperspeed: false,
             });
 
+            setIsOwner(data.is_owner || false);
+
+            
             // Go through and reattach callbacks
             setBlocks((prevBlocks) => {
               return prevBlocks.map((block) => {
@@ -234,7 +239,10 @@ return (
           }}
         >
           favorite
-        </button>        
+        </button>  
+        <span className={"material-symbols-outlined lockicon" + (isOwner ? " " : " lockiconactive")} aria-label="Locked script" >
+        lock
+        </span>      
         <input type="text" placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
         <button className='newscript' onClick={newscript}>New Script</button>
       </div>

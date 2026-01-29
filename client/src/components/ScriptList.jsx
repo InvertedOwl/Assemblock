@@ -3,6 +3,9 @@ import './ScriptList.css';
 
 const ScriptList = ({ scripts }) => {
 
+    const [showConfirmation, setShowConfirmation] = React.useState(false);
+    const [scriptToDelete, setScriptToDelete] = React.useState(null);
+
     const sendToScriptPage = (scriptId) => {
         // Reload the page with the script ID in the cookie
         document.cookie = `script_id=${scriptId}; path=/;`;
@@ -41,25 +44,45 @@ const ScriptList = ({ scripts }) => {
         });
     };
 
+    function truncateWithEllipsis(str, maxLength) {
+        if (str.length <= maxLength) return str;
+        return str.slice(0, maxLength - 3) + "...";
+    }
+
     return (
         <div className='scripts-list'>
+            <div className='confirmation-dialog' style={{ display: showConfirmation ? 'block' : 'none' }}>
+                <span style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                    <h2>Are you sure you want to delete a script?</h2> <br/>
+                    This action cannot be undone.
+                </span>
+
+                <div className='dialog-buttons'>
+                    <button onClick={(e) => {deleteScript(scriptToDelete, e); setShowConfirmation(false);}}>Delete</button>
+                    <button onClick={() => {setShowConfirmation(false); setScriptToDelete(null);}}>Cancel</button>
+                </div>
+            </div>
+
+
             {scripts.length === 0 ? (
                 <p>Loading...</p>
             ) : (
                 scripts.map((script, index) => (
                     <div key={index} className="script-card" onClick={sendToScriptPage.bind(null, script.id)}>
                         <div className='top-container'>
-                            <h2>{script.title || "Untitled"}</h2>
+                            <h2>{truncateWithEllipsis(script.title || "Untitled", 20)}</h2>
                             <h3 className='owner'>{script.owner}</h3>
                             <p className="date">{new Date(script.updated_at).toLocaleDateString()}</p>
                         </div>
                         
                         <div className='bottom-container'>
-                            <div className={"material-icons favorite favorite-active"} aria-label="Favorite">favorite</div>
+                            
 
                             
-                            <p>Favorites: {script.favorited}</p>
-                            {script.is_owner ? <button onClick={(e) => deleteScript(script.id, e)}>Delete</button> : null}
+                            <div className='favorites-number'>
+                                <div className={"material-icons favorite favorite-active"} aria-label="Favorite">favorite</div> <p>{script.favorited}</p>
+                            </div>
+                            {script.is_owner ? <button onClick={(e) => {setShowConfirmation(true); e.stopPropagation(); setScriptToDelete(script.id);}}>Delete</button> : null}
                         </div>
                     </div>
                 ))

@@ -213,6 +213,7 @@ def script(req):
                 "updated_at": script.updated_at,
                 "unlisted": script.unlisted,
                 "favorited": req.user in script.favorited_by.all(),
+                "is_owner": script.owner == req.user,
                 "settings": script.settings_json,
             }
 
