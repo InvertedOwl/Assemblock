@@ -1,5 +1,5 @@
 .collection-page {
-    background-color: var(--background-color);
+    background-color: var(--canvas-background);
     color: var(--text-color);
     height: calc(100vh - 73px);
     padding: 30px;

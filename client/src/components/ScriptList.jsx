@@ -58,8 +58,8 @@ const ScriptList = ({ scripts }) => {
                 </span>
 
                 <div className='dialog-buttons'>
-                    <button onClick={(e) => {deleteScript(scriptToDelete, e); setShowConfirmation(false);}}>Delete</button>
-                    <button onClick={() => {setShowConfirmation(false); setScriptToDelete(null);}}>Cancel</button>
+                    <button className='dialog-button' onClick={(e) => {deleteScript(scriptToDelete, e); setShowConfirmation(false);}}>Delete</button>
+                    <button className='dialog-button' onClick={() => {setShowConfirmation(false); setScriptToDelete(null);}}>Cancel</button>
                 </div>
             </div>
 
@@ -82,7 +82,7 @@ const ScriptList = ({ scripts }) => {
                             <div className='favorites-number'>
                                 <div className={"material-icons favorite favorite-active"} aria-label="Favorite">favorite</div> <p>{script.favorited}</p>
                             </div>
-                            {script.is_owner ? <button onClick={(e) => {setShowConfirmation(true); e.stopPropagation(); setScriptToDelete(script.id);}}>Delete</button> : null}
+                            {script.is_owner ? <button className='small-button' onClick={(e) => {setShowConfirmation(true); e.stopPropagation(); setScriptToDelete(script.id);}}>Delete</button> : null}
                         </div>
                     </div>
                 ))
