@@ -48,11 +48,16 @@ const ScriptList = ({ scripts }) => {
             ) : (
                 scripts.map((script, index) => (
                     <div key={index} className="script-card" onClick={sendToScriptPage.bind(null, script.id)}>
-                        <h2>{script.title || "Untitled"}</h2>
-                        <h3>{script.owner}</h3>
-                        <p className="date">{new Date(script.updated_at).toLocaleDateString()}</p>
+                        <div className='top-container'>
+                            <h2>{script.title || "Untitled"}</h2>
+                            <h3 className='owner'>{script.owner}</h3>
+                            <p className="date">{new Date(script.updated_at).toLocaleDateString()}</p>
+                        </div>
                         
                         <div className='bottom-container'>
+                            <div className={"material-icons favorite favorite-active"} aria-label="Favorite">favorite</div>
+
+                            
                             <p>Favorites: {script.favorited}</p>
                             {script.is_owner ? <button onClick={(e) => deleteScript(script.id, e)}>Delete</button> : null}
                         </div>

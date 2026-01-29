@@ -52,7 +52,7 @@
 .active {
     transition: none;
     box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7);
-    outline: 2px solid var(--accent-color);
+    outline: 2px solid white;
 }
 
 .title-part-with-param {

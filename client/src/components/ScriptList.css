@@ -9,8 +9,11 @@
     align-content: flex-start;
 }
 
+.owner {
+    color: var(--muted-color);
+}
 .script-card {
-    background-color: var(--canvas-background);
+    background-color: var(--background-color);
     width: 200px;
     padding: 10px;
     border-radius: 10px;
@@ -20,6 +23,7 @@
     margin: 10px;
     cursor: pointer;
     user-select: none;
+    justify-content: space-between;
 }
 
 .bottom-container {
