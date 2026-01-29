@@ -27,7 +27,6 @@
     box-shadow: 0px 0px 4000px rgb(0, 0, 0);
     position: absolute;
 
-    /* Position in middle of screen*/
     top: 50vh;
     left: 50vw;
     transform: translate(-50%, -50%);
@@ -44,6 +43,7 @@
     border: none;
     border-radius: 15px;
     font-size: 20px;
+    cursor: pointer;
 }
 
 .script-card {
