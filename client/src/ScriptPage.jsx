@@ -25,7 +25,7 @@ export function ScriptPage() {
     const [memory, setMemories] = useState({});
     const MAX_MEMORY_CELLS = 64;
 
-    const [isOwner, setIsOwner] = useState(false);
+    const [isOwner, setIsOwner] = useState(true);
     
     const [settings, setSettings] = useState({
       numRegisters: 10,
