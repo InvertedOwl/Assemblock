@@ -19,7 +19,6 @@ export const Nav = (props) => {
     useEffect(() => {
         
         getUser().then((data) => {
-            console.log(data);
             setUser(data.user);
         });
     }, []);
