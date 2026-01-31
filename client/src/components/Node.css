@@ -21,6 +21,11 @@
     font-family: monospace;
     margin-top: 10px;
     border-radius: 12px;
+    touch-action: none;
+}
+
+.nodrag {
+    touch-action: auto;
 }
 
 .spacer {

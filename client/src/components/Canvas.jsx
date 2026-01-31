@@ -162,13 +162,14 @@ export const Canvas = (props) => {
     const dragStart = useRef({ x: 0, y: 0 });
 
     const handleMouseDown = (e) => {
-        if (e.button !== 2) return;
+        if (e.pointerType === "mouse" && e.button !== 0) return;
         e.preventDefault();
         isDragging.current = true;
         dragStart.current = { x: e.clientX, y: e.clientY };
+        try { canvasRef.current?.setPointerCapture?.(e.pointerId); } catch (err) {}
     };
 
-    const handleMouseMove = (e) => {
+    const handlePointerMove = (e) => {
         if (!isDragging.current) return;
 
         const deltaX = e.clientX - dragStart.current.x;
@@ -182,9 +183,9 @@ export const Canvas = (props) => {
         dragStart.current = { x: e.clientX, y: e.clientY };
     };
 
-    const handleMouseUp = (e) => {
-        if (e.button !== 2) return; // Only stop dragging on right-click release
+    const handlePointerUp = (e) => {
         isDragging.current = false;
+        try { canvasRef.current?.releasePointerCapture?.(e.pointerId); } catch (err) {}
     };
 
     return (
@@ -194,9 +195,9 @@ export const Canvas = (props) => {
             style={{
                 backgroundPosition: `${gridPosition.x}px ${gridPosition.y}px`,
             }}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
+            onPointerDown={handleMouseDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
             onContextMenu={(e) => e.preventDefault()} // Prevent context menu on right-click
         >
             {blocks.map((block, index) => (

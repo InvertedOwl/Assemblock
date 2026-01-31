@@ -5,19 +5,29 @@ export default function Node(props) {
     const downRef = useRef(false);
     const nodeRef = useRef(null);
 
-    const handleMouseDown = (e) => {
-        if (e.button !== 0) return;
+
+    const handlePointerDown = (e) => {
+        if (e.pointerType === "mouse" && e.button !== 0) return;
         if (e.target.closest(".nodrag")) return;
         downRef.current = true;
 
+        try {
+            nodeRef.current?.setPointerCapture?.(e.pointerId);
+        } catch (err) {}
+
         const rect = nodeRef.current?.getBoundingClientRect();
         props.onDragStart(e, rect);
+        e.stopPropagation();
+        e.preventDefault();
     };
 
-    const handleMouseUp = (e) => {
+    const handlePointerUp = (e) => {
         downRef.current = false;
+        try {
+            nodeRef.current?.releasePointerCapture?.(e.pointerId);
+        } catch (err) {}
         const rect = nodeRef.current?.getBoundingClientRect();
-        props.onDragEnd(e, rect);            
+        props.onDragEnd(e, rect);
     };
 
     const text = props.node.text || "";
@@ -78,8 +88,9 @@ export default function Node(props) {
                 (props.connectedright ? " connectedright" : "") +
                 (props.connectedright && props.connectedleft ? " connectedboth" : "")
             }
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
         >
             {/* Text */}
             <h2 className="param-title">{props.node.title}</h2>

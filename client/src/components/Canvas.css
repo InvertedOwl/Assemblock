@@ -7,4 +7,5 @@
     background-image: radial-gradient(var(--dark-background-color) 3px, transparent 3px);
     background-size: 80px 80px;
     z-index: 12;
+    touch-action: none;
 }

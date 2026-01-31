@@ -13,8 +13,8 @@ export const Block = (props) => {
     // Remove event listeners after unmount
     useEffect(() => {
         return () => {
-            document.removeEventListener("mousemove", handleDocumentMove);
-            document.removeEventListener("mouseup", handleDocumentUp);
+            document.removeEventListener("pointermove", handleDocumentMove);
+            document.removeEventListener("pointerup", handleDocumentUp);
         };
     }, []);
 
@@ -41,8 +41,8 @@ export const Block = (props) => {
             finalizeDragFor(currentBlockId, dragRef.current.nodeIndex, e);
         }
 
-        document.removeEventListener("mousemove", handleDocumentMove);
-        document.removeEventListener("mouseup", handleDocumentUp);
+        document.removeEventListener("pointermove", handleDocumentMove);
+        document.removeEventListener("pointerup", handleDocumentUp);
         dragRef.current.active = false;
     };
 
@@ -63,8 +63,8 @@ export const Block = (props) => {
             startNodeOffsetY,
         };
 
-        document.addEventListener("mousemove", handleDocumentMove);
-        document.addEventListener("mouseup", handleDocumentUp);
+        document.addEventListener("pointermove", handleDocumentMove);
+        document.addEventListener("pointerup", handleDocumentUp);
     }
 
     // NOTE TO PROFESSOR:
