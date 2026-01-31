@@ -17,8 +17,7 @@ export default function Node(props) {
 
         const rect = nodeRef.current?.getBoundingClientRect();
         props.onDragStart(e, rect);
-        e.stopPropagation();
-        e.preventDefault();
+
     };
 
     const handlePointerUp = (e) => {

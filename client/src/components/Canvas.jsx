@@ -162,6 +162,8 @@ export const Canvas = (props) => {
     const dragStart = useRef({ x: 0, y: 0 });
 
     const handleMouseDown = (e) => {
+        // Don't start canvas drag if the down originated on a node or a block
+        if (e.target.closest('.node') || e.target.closest('.block')) return;
         if (e.pointerType === "mouse" && e.button !== 0) return;
         e.preventDefault();
         isDragging.current = true;
