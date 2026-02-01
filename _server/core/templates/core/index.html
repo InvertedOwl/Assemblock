@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Assemblock</title>
   {% csrf_token %}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=discover_tune,lock" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   {% if debug %}
     <script type="module">
       import RefreshRuntime from '{{asset_url}}/static/core/@react-refresh'
@@ -14,9 +16,6 @@
       window.__vite_plugin_react_preamble_installed__ = true
     </script>
     <link rel="shortcut icon" href="{{asset_url}}/static/core/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=discover_tune,lock" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet">
 
     <script type="module" src="{{asset_url}}/static/core/@vite/client"></script>
     <script type="module" src="{{asset_url}}/static/core/src/main.jsx"></script>
