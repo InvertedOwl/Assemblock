@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -123,9 +124,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 # DONT USE THE STATIC URL WHEN IN DEBUG MODE
-STATIC_URL = 'static/' if not DEBUG else "__UNUSED__/"
+STATIC_URL = '/static/'
+if DEBUG:
+    STATIC_URL = "__UNUSED__/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"  # where collectstatic puts final assets
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
