@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 # Load manifest when server launches
 MANIFEST = {}
 if not settings.DEBUG:
-    f = open(f"{settings.BASE_DIR}/core/static/manifest.json")
+    f = open(f"{settings.BASE_DIR}/core/static/core/manifest.json")
     MANIFEST = json.load(f)
 
 # Create your views here.
