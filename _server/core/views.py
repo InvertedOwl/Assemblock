@@ -1,40 +1,27 @@
+from django.shortcuts import render
+from django.conf  import settings
 import json
 import os
-from django.conf  import settings
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.forms.models import model_to_dict
-from django.http import JsonResponse
-from django.contrib.auth.models import User
-from django.db.models import Count
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import logging
-
-logger = logging.getLogger("django")
 
 # Load manifest when server launches
 MANIFEST = {}
 if not settings.DEBUG:
-    manifest_path = settings.BASE_DIR / "staticfiles" / "core" / "manifest.json"
-    try:
-        with open(manifest_path, "r", encoding="utf-8") as f:
-            MANIFEST = json.load(f)
-    except FileNotFoundError:
-        logger.error("Manifest not found: %s", manifest_path)
-    except json.JSONDecodeError as exc:
-        logger.error("Manifest JSON invalid: %s (%s)", manifest_path, exc)
+    f = open(f"{settings.BASE_DIR}/core/static/manifest.json")
+    MANIFEST = json.load(f)
 
+# Create your views here.
 @login_required
 def index(req):
-    entry = MANIFEST.get("src/main.ts", {})
     context = {
         "asset_url": os.environ.get("ASSET_URL", ""),
         "debug": settings.DEBUG,
         "manifest": MANIFEST,
-        "js_file": "" if settings.DEBUG else entry.get("file", ""),
-        "css_file": "" if settings.DEBUG else entry.get("css", [""])[0],
+        "js_file": "" if settings.DEBUG else MANIFEST["src/main.ts"]["file"],
+        "css_file": "" if settings.DEBUG else MANIFEST["src/main.ts"]["css"][0]
     }
     return render(req, "core/index.html", context)
+
 
 @login_required
 def get_me(req):

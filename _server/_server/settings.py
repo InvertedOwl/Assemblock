@@ -11,57 +11,24 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import load_dotenv, dotenv_values
-import os
-import logging
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# load .env files (try _server/.env then project-root/.env)
-ENV_CACHE = {}
-for env_path in (BASE_DIR / ".env", BASE_DIR.parent / ".env"):
-    if env_path.exists():
-        ENV_CACHE.update({k: v for k, v in dotenv_values(env_path).items() if v})
-        load_dotenv(env_path, override=True)
-
-logger = logging.getLogger("django")
-
-# Read and sanitize DJANGO_ALLOWED_HOSTS (remove schemes, strip whitespace)
-def _read_env_list(key):
-    raw = os.getenv(key) or ENV_CACHE.get(key, "")
-    values = []
-    for item in raw.split(",") if raw else []:
-        item = item.strip()
-        if not item:
-            continue
-        if item.startswith(("http://", "https://")):
-            item = item.split("://", 1)[1]
-        values.append(item)
-    return values
-
-DEFAULT_ALLOWED = [
-    "localhost",
-    "127.0.0.1",
-    "assemblock.dev",
-    "api.assemblock.dev",
-    "static.assemblock.dev",
-]
-ALLOWED_HOSTS = _read_env_list("DJANGO_ALLOWED_HOSTS") or DEFAULT_ALLOWED
-logger.warning("ALLOWED_HOSTS at startup: %s", ALLOWED_HOSTS)
+load_dotenv()
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# Load secret key from environment variable. Raise an error if not set.
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
-if not SECRET_KEY:
-    raise ImproperlyConfigured("DJANGO_SECRET_KEY environment variable is not set")
+SECRET_KEY = 'django-insecure-b3+-#mtd71hul#1(jc^^x#k%4zr)aief^c9i14ya77)9e)1af('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("1", "true", "yes")
+DEBUG = True
+
+ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -78,7 +45,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -159,27 +125,9 @@ USE_TZ = True
 # DONT USE THE STATIC URL WHEN IN DEBUG MODE
 STATIC_URL = 'static/' if not DEBUG else "__UNUSED__/"
 
-# Serve collected static files in production
-STATIC_ROOT = str(BASE_DIR / "staticfiles")
-# Optional: prefer compressed manifest storage (requires 'whitenoise' installed)
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "registration/sign_in/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-# Parse CSRF trusted origins and ensure schemes are present (Django requires scheme)
-_raw_csrf = os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "")
-CSRF_TRUSTED_ORIGINS = []
-if _raw_csrf:
-    for o in _raw_csrf.split(","):
-        o = o.strip()
-        if not o:
-            continue
-        if not o.startswith(("http://", "https://")):
-            o = "https://" + o
-        CSRF_TRUSTED_ORIGINS.append(o)
