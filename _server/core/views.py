@@ -1,25 +1,51 @@
-from django.shortcuts import render
-from django.conf  import settings
 import json
 import os
-from django.contrib.auth.decorators import login_required
 
-# Load manifest when server launches
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Count
+from django.forms.models import model_to_dict
+from django.http import JsonResponse
+from django.shortcuts import render
+
+# Load manifest and front-end entrypoint metadata once when the server starts.
 MANIFEST = {}
+ENTRYPOINT = {}
+ENTRY_JS = ""
+ENTRY_CSS = ""
+
 if not settings.DEBUG:
-    f = open(f"{settings.BASE_DIR}/core/static/manifest.json")
-    MANIFEST = json.load(f)
+    manifest_path = settings.BASE_DIR / "core" / "static" / "core" / "manifest.json"
+    try:
+        with open(manifest_path, encoding="utf-8") as manifest_file:
+            MANIFEST = json.load(manifest_file)
+    except FileNotFoundError as exc:
+        raise RuntimeError(
+            "Missing manifest.json. Run the front-end build before starting the server with DEBUG=False."
+        ) from exc
+
+    entry_key = next(
+        (key for key, value in MANIFEST.items() if value.get("isEntry")),
+        None,
+    )
+    fallback_keys = ("src/main.jsx", "src/main.tsx", "src/main.ts")
+    if entry_key is None:
+        entry_key = next((key for key in fallback_keys if key in MANIFEST), None)
+
+    if entry_key is None:
+        raise RuntimeError("Could not locate the Vite entry in manifest.json")
+
+    ENTRYPOINT = MANIFEST[entry_key]
+    ENTRY_JS = ENTRYPOINT.get("file", "")
+    css_files = ENTRYPOINT.get("css") or []
+    ENTRY_CSS = css_files[0] if css_files else ""
+
 
 # Create your views here.
 @login_required
 def index(req):
-    context = {
-        "asset_url": os.environ.get("ASSET_URL", ""),
-        "debug": settings.DEBUG,
-        "manifest": MANIFEST,
-        "js_file": "" if settings.DEBUG else MANIFEST["src/main.ts"]["file"],
-        "css_file": "" if settings.DEBUG else MANIFEST["src/main.ts"]["css"][0]
-    }
     prod_js_path = f"core/{ENTRY_JS}" if ENTRY_JS else ""
     prod_css_path = f"core/{ENTRY_CSS}" if ENTRY_CSS else ""
 
