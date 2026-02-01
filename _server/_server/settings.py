@@ -40,7 +40,14 @@ def _read_env_list(key):
         values.append(item)
     return values
 
-ALLOWED_HOSTS = _read_env_list("DJANGO_ALLOWED_HOSTS") or ["localhost", "127.0.0.1"]
+DEFAULT_ALLOWED = [
+    "localhost",
+    "127.0.0.1",
+    "assemblock.dev",
+    "api.assemblock.dev",
+    "static.assemblock.dev",
+]
+ALLOWED_HOSTS = _read_env_list("DJANGO_ALLOWED_HOSTS") or DEFAULT_ALLOWED
 logger.warning("ALLOWED_HOSTS at startup: %s", ALLOWED_HOSTS)
 
 
