@@ -14,5 +14,5 @@ export default defineConfig({
     },
     outDir: "../_server/core/static/core"
   },
-  base: "/static"
+  base: "/static/core"
 })

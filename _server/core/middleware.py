@@ -1,27 +1,32 @@
-import requests
 import os
+
+import requests
 from django.http import StreamingHttpResponse
 
-def asset_proxy_middleware(next):
+
+STATIC_PROXY_PREFIX = "/static/core"
+
+
+def asset_proxy_middleware(next_handler):
     def middleware(request):
-        # checking for .
         if "." in request.path:
-            # Proxy request to asset server
-            asset_url = os.environ.get('ASSET_URL', '')
-            if asset_url and not asset_url.startswith(('http://', 'https://')):
-                asset_url = 'https://' + asset_url
+            asset_url = os.environ.get("ASSET_URL", "")
+            if asset_url and not asset_url.startswith(("http://", "https://")):
+                asset_url = "https://" + asset_url
 
-            response = requests.get(f"{asset_url}{request.path.replace('/static', '')}", stream=True)
+            upstream_path = request.path
+            if upstream_path.startswith(STATIC_PROXY_PREFIX):
+                upstream_path = upstream_path[len(STATIC_PROXY_PREFIX):]
 
-            # Stream response
+            response = requests.get(f"{asset_url}{upstream_path}", stream=True)
+
             return StreamingHttpResponse(
                 response.raw,
-                content_type=response.headers.get('content-type'),
+                content_type=response.headers.get("content-type"),
                 status=response.status_code,
-                reason=response.reason
+                reason=response.reason,
             )
 
-        # call next middleware
-        return next(request)
+        return next_handler(request)
 
     return middleware
