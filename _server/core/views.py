@@ -12,12 +12,18 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @login_required
 def index(req):
-    asset_url = os.environ.get("ASSET_URL", "")
-    # If ASSET_URL provided without scheme (e.g. "static.assemblock.dev"),
-    # default to https to avoid producing relative URLs like
-    # https://assemblock.dev/static.assemblock.dev/...
-    if asset_url and not asset_url.startswith(("http://", "https://")):
-        asset_url = "https://" + asset_url
+    # In DEBUG, use relative asset paths so the browser requests go to this
+    # Django server (then `asset_proxy_middleware` will proxy them to the
+    # upstream asset server). This avoids CORS during local/dev testing.
+    if settings.DEBUG:
+        asset_url = ""
+    else:
+        asset_url = os.environ.get("ASSET_URL", "")
+        # If ASSET_URL provided without scheme (e.g. "static.assemblock.dev"),
+        # default to https to avoid producing relative URLs like
+        # https://assemblock.dev/static.assemblock.dev/...
+        if asset_url and not asset_url.startswith(("http://", "https://")):
+            asset_url = "https://" + asset_url
 
     context = {
         "asset_url": asset_url,
