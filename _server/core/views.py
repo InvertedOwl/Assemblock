@@ -13,6 +13,7 @@ if not settings.DEBUG:
 # Create your views here.
 @login_required
 def index(req):
+    print("IS DEBUG " + str(settings.DEBUG))
     context = {
         "asset_url": os.environ.get("ASSET_URL", ""),
         "debug": settings.DEBUG,
