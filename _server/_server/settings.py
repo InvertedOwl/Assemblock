@@ -46,10 +46,6 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("1", "true", "yes")
 
-# Hosts: provide a comma-separated list in `DJANGO_ALLOWED_HOSTS`
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",") if os.getenv("DJANGO_ALLOWED_HOSTS") else []
-
-
 # Application definition
 
 INSTALLED_APPS = [
