@@ -125,6 +125,8 @@ USE_TZ = True
 # DONT USE THE STATIC URL WHEN IN DEBUG MODE
 STATIC_URL = 'static/' if not DEBUG else "__UNUSED__/"
 
+STATIC_ROOT = BASE_DIR / "staticfiles"  # where collectstatic puts final assets
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
