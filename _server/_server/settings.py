@@ -23,7 +23,7 @@ ENV_CACHE = {}
 for env_path in (BASE_DIR / ".env", BASE_DIR.parent / ".env"):
     if env_path.exists():
         ENV_CACHE.update({k: v for k, v in dotenv_values(env_path).items() if v})
-        load_dotenv(env_path, override=False)
+        load_dotenv(env_path, override=True)
 
 logger = logging.getLogger("django")
 
