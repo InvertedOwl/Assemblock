@@ -12,7 +12,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Load manifest when server launches
 MANIFEST = {}
 if not settings.DEBUG:
-    f = open(f"{settings.BASE_DIR}/core/static/manifest.json")
+    f = open(f"{settings.BASE_DIR}/staticfiles/core/manifest.json")
     MANIFEST = json.load(f)
 
 @login_required
