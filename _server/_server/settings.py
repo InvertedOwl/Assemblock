@@ -158,3 +158,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "registration/sign_in/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Parse CSRF trusted origins and ensure schemes are present (Django requires scheme)
+_raw_csrf = os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "")
+CSRF_TRUSTED_ORIGINS = []
+if _raw_csrf:
+    for o in _raw_csrf.split(","):
+        o = o.strip()
+        if not o:
+            continue
+        if not o.startswith(("http://", "https://")):
+            o = "https://" + o
+        CSRF_TRUSTED_ORIGINS.append(o)
