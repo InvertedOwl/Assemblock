@@ -153,17 +153,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 # DONT USE THE STATIC URL WHEN IN DEBUG MODE
-# If an asset host is configured via ASSET_URL, and we're not in DEBUG,
-# build an absolute STATIC_URL pointing to that host so assets load from
-# the external static host (e.g. https://static.assemblock.dev/static/).
-asset_url = os.getenv("ASSET_URL", "").strip()
-if asset_url and not asset_url.startswith(("http://", "https://")):
-    asset_url = "https://" + asset_url
-
+# Hardcode static host when DEBUG is False so compiled frontend loads
+# from the dedicated static host.
 if DEBUG:
     STATIC_URL = "__UNUSED__/"
 else:
-    STATIC_URL = f"{asset_url.rstrip('/')}/static/" if asset_url else 'static/'
+    STATIC_URL = "https://static.assemblock.dev/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
