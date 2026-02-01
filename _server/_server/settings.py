@@ -29,6 +29,11 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "assemblock.dev"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://assemblock.dev",
+    "https://www.assemblock.dev",
+]
+
 
 # Application definition
 
