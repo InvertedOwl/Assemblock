@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import load_dotenv
+from dotenv import load_dotenv, dotenv_values
 import os
 import logging
 
@@ -19,24 +19,28 @@ import logging
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # load .env files (try _server/.env then project-root/.env)
+ENV_CACHE = {}
 for env_path in (BASE_DIR / ".env", BASE_DIR.parent / ".env"):
     if env_path.exists():
+        ENV_CACHE.update({k: v for k, v in dotenv_values(env_path).items() if v})
         load_dotenv(env_path, override=False)
 
 logger = logging.getLogger("django")
 
 # Read and sanitize DJANGO_ALLOWED_HOSTS (remove schemes, strip whitespace)
-_raw_hosts = os.getenv("DJANGO_ALLOWED_HOSTS", "")
-_hosts = []
-if _raw_hosts:
-    for h in _raw_hosts.split(","):
-        h = h.strip()
-        if not h:
+def _read_env_list(key):
+    raw = os.getenv(key) or ENV_CACHE.get(key, "")
+    values = []
+    for item in raw.split(",") if raw else []:
+        item = item.strip()
+        if not item:
             continue
-        if h.startswith(("http://", "https://")):
-            h = h.split("://", 1)[1]
-        _hosts.append(h)
-ALLOWED_HOSTS = _hosts if _hosts else ["localhost", "127.0.0.1"]
+        if item.startswith(("http://", "https://")):
+            item = item.split("://", 1)[1]
+        values.append(item)
+    return values
+
+ALLOWED_HOSTS = _read_env_list("DJANGO_ALLOWED_HOSTS") or ["localhost", "127.0.0.1"]
 logger.warning("ALLOWED_HOSTS at startup: %s", ALLOWED_HOSTS)
 
 
