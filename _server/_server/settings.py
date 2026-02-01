@@ -17,7 +17,21 @@ from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv()
+# load project's .env explicitly so gunicorn picks it up
+load_dotenv(BASE_DIR / ".env")
+
+# Read and sanitize DJANGO_ALLOWED_HOSTS (remove schemes, strip whitespace)
+_raw_hosts = os.getenv("DJANGO_ALLOWED_HOSTS", "")
+_hosts = []
+if _raw_hosts:
+    for h in _raw_hosts.split(","):
+        h = h.strip()
+        if not h:
+            continue
+        if h.startswith(("http://", "https://")):
+            h = h.split("://", 1)[1]
+        _hosts.append(h)
+ALLOWED_HOSTS = _hosts if _hosts else ["localhost", "127.0.0.1"]
 
 
 # Quick-start development settings - unsuitable for production
