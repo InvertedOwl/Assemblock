@@ -9,19 +9,20 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+# Load manifest when server launches
+MANIFEST = {}
+if not settings.DEBUG:
+    f = open(f"{settings.BASE_DIR}/core/static/manifest.json")
+    MANIFEST = json.load(f)
 
 @login_required
 def index(req):
-    asset_url = os.environ.get("ASSET_URL", "")
-    # If ASSET_URL provided without scheme (e.g. "static.assemblock.dev"),
-    # default to https to avoid producing relative URLs like
-    # https://assemblock.dev/static.assemblock.dev/...
-    if asset_url and not asset_url.startswith(("http://", "https://")):
-        asset_url = "https://" + asset_url
-
     context = {
-        "asset_url": asset_url,
+        "asset_url": os.environ.get("ASSET_URL", ""),
         "debug": settings.DEBUG,
+        "manifest": MANIFEST,
+        "js_file": "" if settings.DEBUG else MANIFEST["src/main.ts"]["file"],
+        "css_file": "" if settings.DEBUG else MANIFEST["src/main.ts"]["css"][0]
     }
     return render(req, "core/index.html", context)
 

@@ -32,32 +32,8 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("1", "true", "yes")
 
-# Hosts: provide a comma-separated list in `DJANGO_ALLOWED_HOSTS`.
-# Accepts entries like "localhost,127.0.0.1,assemblock.dev,https://assemblock.dev"
-raw_allowed = os.getenv("DJANGO_ALLOWED_HOSTS", "")
-if raw_allowed:
-    # Normalize by stripping whitespace and removing any scheme prefixes for ALLOWED_HOSTS
-    ALLOWED_HOSTS = [
-        h.strip().replace("http://", "").replace("https://", "")
-        for h in raw_allowed.split(",")
-        if h.strip()
-    ]
-else:
-    ALLOWED_HOSTS = []
-
-# CSRF trusted origins must include scheme (e.g. https://assemblock.dev).
-# Use DJANGO_CSRF_TRUSTED_ORIGINS env var if provided, else fall back to any
-# scheme-prefixed entries from DJANGO_ALLOWED_HOSTS.
-raw_trusted = os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "")
-if raw_trusted:
-    CSRF_TRUSTED_ORIGINS = [o.strip() for o in raw_trusted.split(",") if o.strip()]
-else:
-    # fall back: include any allowed-host entries that were provided with a scheme
-    CSRF_TRUSTED_ORIGINS = [
-        h.strip()
-        for h in os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
-        if h.strip() and (h.strip().startswith("http://") or h.strip().startswith("https://"))
-    ]
+# Hosts: provide a comma-separated list in `DJANGO_ALLOWED_HOSTS`
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",") if os.getenv("DJANGO_ALLOWED_HOSTS") else []
 
 
 # Application definition
@@ -75,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -153,12 +130,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 # DONT USE THE STATIC URL WHEN IN DEBUG MODE
-# Hardcode static host when DEBUG is False so compiled frontend loads
-# from the dedicated static host.
-if DEBUG:
-    STATIC_URL = "__UNUSED__/"
-else:
-    STATIC_URL = "https://static.assemblock.dev/static/"
+STATIC_URL = 'static/' if not DEBUG else "__UNUSED__/"
+
+# Serve collected static files in production
+STATIC_ROOT = str(BASE_DIR / "staticfiles")
+# Optional: prefer compressed manifest storage (requires 'whitenoise' installed)
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
