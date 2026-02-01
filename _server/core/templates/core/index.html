@@ -21,8 +21,13 @@
     <script type="module" src="{{asset_url}}/static/@vite/client"></script>
     <script type="module" src="{{asset_url}}/static/src/main.jsx"></script>
   {% else %}
-    <link rel="stylesheet" href="/static/{{css_file}}" />
-    <script type="module" src="/static/{{js_file}}"></script>
+    {% if asset_url %}
+      <link rel="stylesheet" href="{{asset_url}}/static/{{css_file}}" />
+      <script type="module" src="{{asset_url}}/static/{{js_file}}"></script>
+    {% else %}
+      <link rel="stylesheet" href="/static/{{css_file}}" />
+      <script type="module" src="/static/{{js_file}}"></script>
+    {% endif %}
   {% endif %}
 </head>
 <body>
