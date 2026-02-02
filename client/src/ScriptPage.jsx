@@ -246,7 +246,9 @@ export function ScriptPage() {
 
     useEffect(() => {
         const cookies = parseCookie(document.cookie || "");
-        const scriptId = cookies.script_id;
+        const urlParams = new URLSearchParams(window.location.search || "");
+        const hashParams = new URLSearchParams((window.location.hash || "").split("?")[1] || "");
+        const scriptId = urlParams.get("id") || hashParams.get("id") || cookies.script_id;
 
         // If no id, then new script and dont apply any saved data
         if (!scriptId) {
