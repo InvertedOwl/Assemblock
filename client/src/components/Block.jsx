@@ -102,6 +102,10 @@ export const Block = (props) => {
 
         // Otherwise clamp to canvas, accounting for current grid offset
         setBlockData((prevBlocks) => {
+
+            if (isNarrowScreen) {
+                return prevBlocks;
+            }
             const newBlocks = [...prevBlocks];
             if (!newBlocks[blockId]) return prevBlocks;
             const targetBlock = { ...newBlocks[blockId] };
