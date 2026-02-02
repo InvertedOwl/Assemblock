@@ -11,6 +11,10 @@ export const Nav = (props) => {
         setMenuOpen(!menuOpen);
     };
 
+    const closeMenu = () => {
+        setMenuOpen(false);
+    };
+
     const getUser = async () => {
         const res = await fetch('/me/', {
             credentials: 'same-origin'
@@ -41,7 +45,7 @@ export const Nav = (props) => {
             <div className={`nav-links ${menuOpen ? "open" : ""}`}>
                 <NavLink to="/" className={({ isActive }) =>
                     isActive ? "navlink navlink-active" : "navlink"
-                }>
+                } onClick={closeMenu}>
                     Script
                 </NavLink>
                 <NavLink
@@ -49,6 +53,7 @@ export const Nav = (props) => {
                     className={({ isActive }) =>
                         isActive ? "navlink navlink-active" : "navlink"
                     }
+                    onClick={closeMenu}
                 >
                     Explore Scripts
                 </NavLink>
@@ -57,17 +62,18 @@ export const Nav = (props) => {
                     className={({ isActive }) =>
                         isActive ? "navlink navlink-active" : "navlink"
                     }
+                    onClick={closeMenu}
                 >
                     Collection
                 </NavLink>
                 {user ? (
                     <NavLink to="/profile/" className={({ isActive }) =>
                         isActive ? "navlink navlink-active" : "navlink"
-                    }>
+                    } onClick={closeMenu}>
                         {user.first_name + " " + user.last_name}
                     </NavLink>
                 ) : (
-                    <a href="/registration/login">Login</a>
+                    <a href="/registration/login" onClick={closeMenu}>Login</a>
                 )}
             </div>
 
