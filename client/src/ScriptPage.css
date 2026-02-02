@@ -7,6 +7,17 @@
     position: relative;
 }
 
+.title {
+    position: absolute;
+    z-index: 20;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+
 .scriptpage {
     overflow: hidden;
     height: calc(100vh - 55px);
@@ -14,9 +25,10 @@
 
 @media (max-width: 600px) {
     .scriptpage {
-        max-width: 600px;
-        height: auto;
-        overflow: auto;
+        /* max-width: 600px; */
+        /* height: auto; */
+        /* overflow: auto; */
+        overflow-y: auto;
     }
 
     .body {
@@ -24,10 +36,23 @@
         height: auto;
         gap: 12px;
         padding: 8px 10px 16px;
+
+        align-items: center;
+    }
+
+    .control-button {
+        position: absolute !important;
+        top: 250px !important;
+        left: 20px !important;
+        width: 65px !important;
+    }
+
+
+    .favorite {
+        width: 20px;
     }
 
     .left {
-        width: 100%;
         min-width: 0;
         height: 120px;
         flex: none;
@@ -44,6 +69,7 @@
         overflow-x: auto;
         overflow-y: hidden;
         padding: 8px 10px;
+        width: 100%;
     }
 
     .canvas {
@@ -80,10 +106,13 @@
 
     .title {
         position: static;
-        width: 100%;
-        flex-wrap: wrap;
-        flex-direction: column;
-        align-items: stretch;
+        /* use grid for precise mobile layout so elements don't stack awkwardly */
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            "t t"
+            "l n";
         gap: 8px;
         padding: 8px 10px;
         background: var(--background-color);
@@ -91,14 +120,25 @@
         box-shadow: 0 6px 18px rgba(0,0,0,0.18);
     }
 
-    .title > input {
+    .titleinput {
         width: 100%;
-        font-size: 16px;
-        padding: 8px 12px;
+        font-size: 18px;
+        padding: 10px 12px;
+        background-color: var(--canvas-background) !important;
     }
 
     .title > * {
         margin: 0;
+    }
+
+    .togetherforver {
+        grid-area: t;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
     }
 
     .body {
@@ -127,10 +167,63 @@
 
     .settings {
         position: fixed;
-        right: 12px;
-        top: 64px;
+        right: 12px !important;
+        top: 254px !important;
         z-index: 50;
+        
     }
+
+
+
+    /* place lock icon and newscript into the grid areas */
+    .title > .lockicon {
+        grid-area: l;
+        justify-self: start;
+        align-self: center;
+    }
+
+    .title > .newscript {
+        grid-area: n;
+        justify-self: end;
+        align-self: center;
+        margin-right: 30px;
+        width: 180px;
+    }
+
+    /* ensure favorite button and input behave */
+    .title .favorite {
+        flex: 0 0 auto;
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .favorite {
+        background-color: transparent;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+
+    .list {
+        background-color: var(--canvas-background);
+        border-radius: 15px;
+    }
+
+    .left {
+        width: 250px !important;
+    }
+
+    .hamburger-menu {
+        display: block !important;
+    }
+}
+
+.hamburger-menu {
+    display: none;
 }
 
 .control-button {
@@ -238,18 +331,7 @@
     border-radius: 200px;
 }
 
-/* Position in center */
-.title {
-    position: absolute;
-    z-index: 20;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
-
-.title > input {
+.titleinput {
     background-color: var(--background-color);
     color: var(--text-color);
     font-size: 20px;
@@ -293,6 +375,8 @@
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.2s ease;
+    margin-right: 30px;
+    width: 220px;
 }
 
 ::-webkit-scrollbar {

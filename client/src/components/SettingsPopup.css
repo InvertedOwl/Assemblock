@@ -27,3 +27,11 @@
   text-align: right;
 }
 .settings-note { color: #666; font-size: 12px; }
+
+
+@media (max-width: 600px) {
+  .settings-popup {
+    right: 10px;
+    top: 335px;
+  }
+}
