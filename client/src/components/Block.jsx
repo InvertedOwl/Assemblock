@@ -87,16 +87,6 @@ export const Block = (props) => {
         const selfTop = selfBlockRect.top - canvasRect.top;
         const selfBottom = selfBlockRect.bottom - canvasRect.top;
 
-        if (selfStart < 0) {
-            setBlockData((prevBlocks) => {
-                const newBlocks = [...prevBlocks];
-                if (blockId < 0 || blockId >= newBlocks.length) return prevBlocks;
-                newBlocks.splice(blockId, 1);
-                return newBlocks;
-            });
-            return;
-        }
-
         // Otherwise clamp to canvas, accounting for current grid offset
         setBlockData((prevBlocks) => {
             const newBlocks = [...prevBlocks];
