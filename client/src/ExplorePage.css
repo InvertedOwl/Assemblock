@@ -17,3 +17,9 @@ h2, h3 {
     color: var(--muted-color);
     margin-top: 5px;
 }
+
+@media (max-width: 600px) {
+    .explore-page {
+        max-width: 600px;
+    }
+}

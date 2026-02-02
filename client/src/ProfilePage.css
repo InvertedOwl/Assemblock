@@ -6,6 +6,11 @@
     padding-left: 100px;
 }
 
+@media (max-width: 600px) {
+    .profile-page {
+        max-width: 600px;
+    }
+}
 
 h2, h3 {
     margin: 0;

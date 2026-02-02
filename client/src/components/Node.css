@@ -24,6 +24,30 @@
     touch-action: none;
 }
 
+@media (max-width: 600px) {
+    .node {
+        height: 32px;
+        font-size: 12px;
+        min-width: 40px;
+        padding: 1px 3px;
+        border-radius: 8px;
+        margin-top: 6px;
+        max-width: 600px;
+    }
+    .param {
+        width: 30px;
+        font-size: 9px !important;
+        padding: 1px;
+        border-radius: 3px;
+    }
+    .param-title {
+        font-size: 10px;
+    }
+    .spacer {
+        font-size: 10px;
+    }
+}
+
 .nodrag {
     touch-action: auto;
 }

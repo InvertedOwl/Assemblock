@@ -5,8 +5,11 @@ import { Link, NavLink } from "react-router-dom";
 
 export const Nav = (props) => {
     const [user, setUser] = useState(null);
+    const [menuOpen, setMenuOpen] = useState(false);
 
-    
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+    };
 
     const getUser = async () => {
         const res = await fetch('/me/', {
@@ -30,12 +33,15 @@ export const Nav = (props) => {
                     <img src={logo} alt="Assemblock Logo" className="assemblock-logo"/>
                     <h2 className="title-assemblock">Assemblock</h2>  
                 </NavLink>
-                <NavLink
-                    to="/"
-                    className={({ isActive }) =>
-                        isActive ? "navlink navlink-active" : "navlink"
-                    }
-                >
+                <button className="hamburger-menu" onClick={toggleMenu}>
+                    ☰
+                </button>
+            </div>
+
+            <div className={`nav-links ${menuOpen ? "open" : ""}`}>
+                <NavLink to="/" className={({ isActive }) =>
+                    isActive ? "navlink navlink-active" : "navlink"
+                }>
                     Script
                 </NavLink>
                 <NavLink
@@ -54,18 +60,12 @@ export const Nav = (props) => {
                 >
                     Collection
                 </NavLink>
-            </div>
-
-            <div className="nav-right">
                 {user ? (
-                    <span>                <NavLink
-                    to="/profile/"
-                    className={({ isActive }) =>
+                    <NavLink to="/profile/" className={({ isActive }) =>
                         isActive ? "navlink navlink-active" : "navlink"
-                    }
-                >
-                    {user.first_name + " " + user.last_name}
-                </NavLink></span>
+                    }>
+                        {user.first_name + " " + user.last_name}
+                    </NavLink>
                 ) : (
                     <a href="/registration/login">Login</a>
                 )}
