@@ -31,10 +31,15 @@ export function ScriptPage() {
       numRegisters: 10,
       executionSpeed: 500,
       hyperspeed: false,
+      preloadedMemory: {}, // Add preloadedMemory to settings
     });
+
+    const [preloadedMemory, setPreloadedMemory] = useState({}); // Add a separate state for preloadedMemory
 
     const [rightNavPage, setRightNavPage] = useState('console');
     
+    const [isRuntime, setIsRuntime] = useState(false);
+
     const [registers, setRegisters] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
     const setRegister = (index, value) => {
@@ -65,7 +70,9 @@ export function ScriptPage() {
 
   useEffect(() => {
         if (playing) {
-        setConsoleLines([]);
+          setConsoleLines([]);
+          setMemories(preloadedMemory); // Load preloaded memory into runtime memory when starting 
+          setIsRuntime(true); 
         }
     }, [playing]);
 
@@ -143,6 +150,8 @@ export function ScriptPage() {
           document.removeEventListener('pointerup', onUp);
         };
     }, [paletteDrag]);
+
+    
 
     // Finalize placement for a block created from the palette
     function finalizePaletteBlock(blockId) {
@@ -269,8 +278,10 @@ export function ScriptPage() {
               numRegisters: 10,
               executionSpeed: 500,
               hyperspeed: false,
+              preloadedMemory: {}, // Add preloadedMemory to settings
             });
 
+            setPreloadedMemory(data.settings?.preloadedMemory || {}); // Load preloaded memory into its own state
             setIsOwner(data.is_owner || false);
 
             
@@ -298,7 +309,10 @@ export function ScriptPage() {
       "title": title,
       "id": parseCookie(document.cookie).script_id || null,
       "favorited": updatedFields.favorited !== undefined ? updatedFields.favorited : favorited,
-      "settings": settings,
+      "settings": {
+        ...settings,
+        preloadedMemory: preloadedMemory, // Include preloadedMemory in settings
+      },
       "unlisted": settings.unlisted || false,
       "removed": removed,
     };
@@ -328,12 +342,25 @@ export function ScriptPage() {
 
   
 
+useEffect(() => {
+    const interval = setInterval(() => {
+        if (blocks.length > 0) {
+            saveScript(); // Save only if there are blocks
+        }
+    }, 5000); // Save every 5 seconds
+
+    return () => clearInterval(interval); // Clear interval on component unmount
+}, [blocks]); // Only re-run when blocks change
+
 return (
     <div className="app scriptpage">
 
       <div className='title'>
         
         <div className='togetherforver'>
+          <span className={"material-symbols-outlined lockicon" + (isOwner ? " " : " lockiconactive")} aria-label="Locked script" >
+          lock
+          </span>      
           <button
             className={"material-icons favorite" + (favorited ? " favorite-active" : "")}
             aria-label="Favorite"
@@ -350,9 +377,6 @@ return (
             <input type="text" className='titleinput' placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
           <button className='newscript' onClick={newscript}>New Script</button>
         </div>
-        <span className={"material-symbols-outlined lockicon" + (isOwner ? " " : " lockiconactive")} aria-label="Locked script" >
-        lock
-        </span>      
       </div>
 
 
@@ -397,7 +421,11 @@ return (
             </div>
 
         </div>
-        <Canvas settings={settings} className='canvas' playing={playing} setPlaying={setPlaying} blocks={blocks} setBlocks={setBlocks} registers={registers} setRegister={setRegister} addConsoleLine={addConsoleLine} memory={memory} setMemory={setMemory} ></Canvas>
+        <Canvas settings={settings} className='canvas' playing={playing} 
+        setPlaying={setPlaying} blocks={blocks} setBlocks={setBlocks} 
+        registers={registers} setRegister={setRegister} addConsoleLine={addConsoleLine} 
+        memory={memory} setMemory={setMemory} saveScript={saveScript}></Canvas>
+
         <div className='right'>
 
           <div className='rightnav'>
@@ -412,7 +440,7 @@ return (
             <Registers registers={registers}></Registers>
           </div>
           <div className='memory' style={{ display: rightNavPage === 'memory' ? 'block' : 'none' }}>
-            <Memory memory={memory} maxMemoryCells={MAX_MEMORY_CELLS}></Memory>
+            <Memory isRuntime={isRuntime} setIsRuntime={setIsRuntime} memory={memory} maxMemoryCells={MAX_MEMORY_CELLS} preloadedMemory={preloadedMemory} setPreloadedMemory={setPreloadedMemory}></Memory>
           </div>
         </div>
       </div>

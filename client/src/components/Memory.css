@@ -38,3 +38,53 @@
     flex-direction: column;
     align-items: center;
 }
+.highlighted {
+    background-color: var(--background-color);
+    border-radius: 5px;
+}
+
+.memory-value {
+    text-align: center;
+    margin: 0;
+}
+
+.memory-input {
+    font-family: monospace;
+    width: 2ch; /* Match the width of the cell content */
+    height: 100%; /* Match the height of the cell */
+    padding: 0px; /* Remove padding */
+    font-size: 1em; /* Slightly smaller font size to match the cell text */
+    text-align: center; /* Center the text */
+    border: none; /* Remove border */
+    outline: none; /* Remove focus outline */
+    background: transparent; /* Match the background */
+    box-sizing: border-box; /* Ensure padding and border are included in width/height */
+}
+
+.memory-mode-button {
+  font-size: 1em;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: var(--background-color);
+  color: white;
+  border: none;
+  padding: 5px;
+}
+
+.memory-mode-button:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.button-active {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.memory-mode-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin: 15px 0;
+}

@@ -26,7 +26,6 @@ export default function Node(props) {
             nodeRef.current?.releasePointerCapture?.(e.pointerId);
         } catch (err) {}
         const rect = nodeRef.current?.getBoundingClientRect();
-        props.onDragEnd(e, rect);
     };
 
     const text = props.node.text || "";

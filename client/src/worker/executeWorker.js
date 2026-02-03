@@ -16,7 +16,6 @@ self.onmessage = (e) => {
         result = { updates: [], consoleLines: [], jump: false, setMemory: []};
       }
     }
-    console.log(JSON.stringify(memory));
     self.postMessage({ type: 'nodeResult', id, payload: result });
   }
 };

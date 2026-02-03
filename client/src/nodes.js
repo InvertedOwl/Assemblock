@@ -235,9 +235,22 @@ const nodes = [
     (params, registers, memory, setRegister, addToConsole, setMemory) => {
         const pvals = (params || []).map(p => (p && typeof p === 'object') ? p.value : p);
         const n = (v) => { const x = Number(v); return Number.isNaN(x) ? 0 : x };
-        const a = n(pvals[1]);
+        const a = n(pvals[0]);
         const updates = [];
         const consoleLines = [`${registers[a] || 0}`];
+        const jump = false;
+        if (addToConsole) consoleLines.forEach(l => addToConsole(l));
+        if (setRegister) updates.forEach(u => setRegister(u.reg, u.value));
+        return (setRegister || addToConsole) ? jump : { updates, consoleLines, jump };
+    }, "type": "action", "color": color.action, "active": false},
+    {"title": "Print Char", "text": "Char $<param>", "params": [{"type": "number", "value": "0", "name": "tolabel"}], "callback": 
+    (params, registers, memory, setRegister, addToConsole, setMemory) => {
+        const pvals = (params || []).map(p => (p && typeof p === 'object') ? p.value : p);
+        const n = (v) => { const x = Number(v); return Number.isNaN(x) ? 0 : x };
+        const a = n(pvals[0]);
+        const updates = [];
+        const charValue = String.fromCharCode(registers[a] || 0);
+        const consoleLines = [charValue];
         const jump = false;
         if (addToConsole) consoleLines.forEach(l => addToConsole(l));
         if (setRegister) updates.forEach(u => setRegister(u.reg, u.value));
