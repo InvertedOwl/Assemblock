@@ -87,7 +87,10 @@ export const Block = (props) => {
         const selfTop = selfBlockRect.top - canvasRect.top;
         const selfBottom = selfBlockRect.bottom - canvasRect.top;
 
-        if (selfStart < 0) {
+        const isNarrowScreen = typeof window !== "undefined" && window.innerWidth < 600;
+        const shouldDelete = isNarrowScreen ? (selfTop < 0) : (selfStart < 0);
+
+        if (shouldDelete) {
             setBlockData((prevBlocks) => {
                 const newBlocks = [...prevBlocks];
                 if (blockId < 0 || blockId >= newBlocks.length) return prevBlocks;
@@ -99,6 +102,10 @@ export const Block = (props) => {
 
         // Otherwise clamp to canvas, accounting for current grid offset
         setBlockData((prevBlocks) => {
+
+            if (isNarrowScreen) {
+                return prevBlocks;
+            }
             const newBlocks = [...prevBlocks];
             if (!newBlocks[blockId]) return prevBlocks;
             const targetBlock = { ...newBlocks[blockId] };

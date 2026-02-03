@@ -7,11 +7,6 @@
     background-color: var(--background-color);
 }
 
-@media (max-width: 600px) {
-    .app {
-        max-width: 600px;
-    }
-}
 
 .action-button {
     margin-bottom: 20px;

@@ -1,7 +1,6 @@
 .collection-page {
     background-color: var(--canvas-background);
     color: var(--text-color);
-    height: calc(100vh - 73px);
     padding: 30px;
     padding-left: 100px;
     
@@ -20,6 +19,6 @@ h2, h3 {
 
 @media (max-width: 600px) {
     .collection-page {
-        max-width: 600px;
+        padding-left: 25px !important;
     }
 }

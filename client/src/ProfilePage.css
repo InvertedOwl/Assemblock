@@ -8,7 +8,7 @@
 
 @media (max-width: 600px) {
     .profile-page {
-        max-width: 600px;
+        padding-left: 25px !important;
     }
 }
 
