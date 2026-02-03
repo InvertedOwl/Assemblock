@@ -23,6 +23,11 @@
     height: calc(100vh - 55px);
 }
 
+.togetherforver {
+    display: flex;
+    gap: 10px;
+}
+
 @media (max-width: 600px) {
     .scriptpage {
         /* max-width: 600px; */
@@ -379,7 +384,7 @@
     font-size: 16px;
     transition: background-color 0.2s ease;
     margin-right: 30px;
-    width: 220px;
+    width: 100px;
 }
 
 ::-webkit-scrollbar {
