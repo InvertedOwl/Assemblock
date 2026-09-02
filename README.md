@@ -92,8 +92,18 @@ files:
 ```powershell
 cd ..\_server
 poetry install --no-root
+```
+
+## Collect Static Files
+
+Run this from `_server/` after every frontend production build:
+
+```powershell
 poetry run python manage.py collectstatic --noinput
 ```
+
+This copies and processes the frontend assets into `_server/staticfiles/`,
+where WhiteNoise serves them in production.
 
 For a quick local production preview:
 
