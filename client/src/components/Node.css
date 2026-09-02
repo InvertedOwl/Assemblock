@@ -97,6 +97,8 @@
     border: none;
     border-radius: 5px;
     font-size: 10px;
+    -moz-appearance: textfield !important;
+    appearance: textfield;
 }
 
 .param-number {
